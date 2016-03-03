@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerViewAdapter.NotaHolder> {
 
-    private static String TAG = "NotaRecyclerViewAdapter";
+    public static String TAG = "NotaRecyclerViewAdapter";
 
     private List<Nota> notas;
 
@@ -40,7 +40,7 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "onClick: "+ holder.nota);
+                if (BuildConfig.DEBUG) Log.d(TAG, "onClick: "+ new NotasManager().toString(holder.nota));
             }
         });
     }
