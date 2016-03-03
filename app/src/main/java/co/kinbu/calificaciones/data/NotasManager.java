@@ -1,7 +1,9 @@
-package co.kinbu.calificaciones;
+package co.kinbu.calificaciones.data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import co.kinbu.calificaciones.data.model.Nota;
 
 /**
  * NotasManager

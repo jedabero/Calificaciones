@@ -1,4 +1,4 @@
-package co.kinbu.calificaciones;
+package co.kinbu.calificaciones.data.model;
 
 import io.realm.RealmObject;
 

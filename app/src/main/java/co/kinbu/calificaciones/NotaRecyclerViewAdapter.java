@@ -10,6 +10,9 @@ import android.widget.ImageButton;
 
 import java.util.List;
 
+import co.kinbu.calificaciones.data.NotasManager;
+import co.kinbu.calificaciones.data.model.Nota;
+
 /**
  * NotaRecyclerViewAdapter
  * Created by jedabero on 2/03/16.

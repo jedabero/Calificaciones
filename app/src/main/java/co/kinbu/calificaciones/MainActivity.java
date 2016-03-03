@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import co.kinbu.calificaciones.data.model.Nota;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
