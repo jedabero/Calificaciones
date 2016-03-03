@@ -61,7 +61,7 @@ public class Nota {
     public JSONObject toJSON() {
         JSONObject nota = new JSONObject();
         try {
-            nota.put("valor", nota);
+            nota.put("valor", valor);
             nota.put("peso", peso);
         } catch (JSONException e) { e.printStackTrace(); }
         return nota;
