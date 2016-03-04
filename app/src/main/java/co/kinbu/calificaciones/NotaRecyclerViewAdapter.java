@@ -2,7 +2,6 @@ package co.kinbu.calificaciones;
 
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,8 @@ import android.widget.ImageButton;
 
 import java.util.List;
 
-import co.kinbu.calificaciones.data.NotasManager;
 import co.kinbu.calificaciones.data.model.Nota;
+import co.kinbu.calificaciones.view.NotasFragment.OnFragmentInteractionListener;
 
 /**
  * NotaRecyclerViewAdapter
@@ -21,10 +20,13 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
 
     public static String TAG = "NotaRecyclerViewAdapter";
 
+    private OnFragmentInteractionListener mListener;
+
     private List<Nota> notas;
 
-    public NotaRecyclerViewAdapter(List<Nota> notas/*, listener*/) {
+    public NotaRecyclerViewAdapter(List<Nota> notas, OnFragmentInteractionListener listener) {
         this.notas = notas;
+        mListener = listener;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(final NotaHolder holder, int position) {
+    public void onBindViewHolder(final NotaHolder holder, final int position) {
         holder.nota = notas.get(position);
         holder.valorText.setText(String.valueOf(holder.nota.getValor()));
         holder.pesoText.setText(String.valueOf(holder.nota.getPeso()));
@@ -43,7 +45,7 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "onClick: "+ new NotasManager().toString(holder.nota));
+                mListener.onDeleteNota(removeItem(position));
             }
         });
     }
@@ -51,6 +53,62 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
     @Override
     public int getItemCount() {
         return notas.size();
+    }
+
+    public Nota removeItem (int position) {
+        final Nota n = notas.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, notas.size());
+        return n;
+    }
+
+    public void addItem(Nota n) {
+        addItem(notas.size(), n);
+    }
+
+    public void addItem(int position, Nota n) {
+        notas.add(position, n);
+        notifyItemInserted(position);
+    }
+
+    public void moveItem(int from, int to) {
+        final Nota n = notas.remove(from);
+        notas.add(to, n);
+        notifyItemMoved(from, to);
+    }
+
+    public void animateTo(List<Nota> list) {
+        applyAndAnimateRemovals(list);
+        applyAndAnimateAdditions(list);
+        applyAndAnimateMovedItems(list);
+    }
+
+    private void applyAndAnimateRemovals(List<Nota> list) {
+        for (int i = notas.size() - 1; i >= 0; i--) {
+            final Nota u = notas.get(i);
+            if (!list.contains(u)) {
+                removeItem(i);
+            }
+        }
+    }
+
+    private void applyAndAnimateAdditions(List<Nota> list) {
+        for (int i = 0, count = list.size(); i < count; i++) {
+            final Nota u = list.get(i);
+            if (!notas.contains(u)){
+                addItem(i, u);
+            }
+        }
+    }
+
+    private void applyAndAnimateMovedItems(List<Nota> list) {
+        for (int to = list.size() -1; to > 0; to--) {
+            final Nota u = list.get(to);
+            final int from = notas.indexOf(u);
+            if (from >= 0 && from != to){
+                moveItem(from, to);
+            }
+        }
     }
 
     class NotaHolder extends RecyclerView.ViewHolder {
