@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +69,39 @@ public class NotasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notas, container, false);
-        mNotasView = (RecyclerView) view;
-        mNotasView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //TODO MODEL
+        TextView nombreView = (TextView) view.findViewById(R.id.asignatura_nombre);
+        nombreView.setText(String.valueOf("Asignatura"));
+        TextView promedioView = (TextView) view.findViewById(R.id.asignatura_promedio);
+        promedioView.setText(String.valueOf(3.2));
+
+        registerForContextMenu(view.findViewById(R.id.asignatura_detalles));
+
+        mNotasView = (RecyclerView) view.findViewById(R.id.list_notas);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mNotasView.setLayoutManager(layoutManager);
         mNotasAdapter = new NotaRecyclerViewAdapter(mNotas, mListener);
         mNotasView.setAdapter(mNotasAdapter);
+
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getActivity().getMenuInflater().inflate(R.menu.menu_nota, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.opcion_agregar:
+
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override

@@ -4,6 +4,8 @@
     <string name="label_nota">Nota</string>
     <string name="label_peso">Peso</string>
 
+    <string name="opcion_agregar">Agregar nota</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
