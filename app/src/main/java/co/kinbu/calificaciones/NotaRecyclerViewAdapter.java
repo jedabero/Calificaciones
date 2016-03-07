@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import java.util.List;
 
 import co.kinbu.calificaciones.data.model.Nota;
-import co.kinbu.calificaciones.view.NotasFragment.OnFragmentInteractionListener;
+import co.kinbu.calificaciones.view.AsignaturaFragment.OnFragmentInteractionListener;
 
 /**
  * NotaRecyclerViewAdapter

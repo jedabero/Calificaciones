@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.kinbu.calificaciones.data.NotasManager;
+import co.kinbu.calificaciones.data.model.Asignatura;
 import co.kinbu.calificaciones.data.model.Nota;
-import co.kinbu.calificaciones.view.NotasFragment;
+import co.kinbu.calificaciones.view.AsignaturaFragment;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity implements
-        NotasFragment.OnFragmentInteractionListener {
+        AsignaturaFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
@@ -30,25 +31,31 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         initInstances();
 
-        /*mRealm.beginTransaction();
+        mRealm.beginTransaction();
+        Asignatura asignatura = mRealm.createObject(Asignatura.class);
+        asignatura.setNombre("Teoria de Automatas");
+        double definitiva = 0;
+        int pesoTotal = 0;
         for (int i = 0; i < 3; i++) {
             Nota nota = mRealm.createObject(Nota.class);
-            nota.setValor(1 + i);
-            nota.setPeso(20 - i);
+            nota.setValor(2 + i);
+            nota.setPeso(4 - i);
+            asignatura.getNotas().add(nota);
+            definitiva += nota.getValor()*nota.getPeso();
+            pesoTotal += nota.getPeso();
         }
-        mRealm.commitTransaction();*/
+        definitiva /= pesoTotal;
+        asignatura.setDefinitiva(definitiva);
+        mRealm.commitTransaction();
 
-        List<Nota> notas = new ArrayList<>();
-        notas.addAll(mRealm.allObjects(Nota.class));
-
-        NotasFragment fragment = NotasFragment.newInstance();
+        AsignaturaFragment fragment = AsignaturaFragment.newInstance();
         fragment.setArguments(getIntent().getExtras());
 
         String backstack = fragment.getClass().getName();
         mFragmentManager.beginTransaction().add(R.id.fragment_container, fragment, backstack)
                 .addToBackStack(backstack).commit();
 
-        fragment.setNotas(notas);
+        fragment.setAsignatura(asignatura);
     }
 
     private void initInstances() {
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDeleteNota(Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: " + NotasManager.toString(nota));
         if (nota == null) return;
         mRealm.beginTransaction();
         nota.removeFromRealm();

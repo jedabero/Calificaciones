@@ -19,42 +19,43 @@ import java.util.List;
 
 import co.kinbu.calificaciones.NotaRecyclerViewAdapter;
 import co.kinbu.calificaciones.R;
+import co.kinbu.calificaciones.data.model.Asignatura;
 import co.kinbu.calificaciones.data.model.Nota;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NotasFragment.OnFragmentInteractionListener} interface
+ * {@link AsignaturaFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NotasFragment#newInstance} factory method to
+ * Use the {@link AsignaturaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NotasFragment extends Fragment {
+public class AsignaturaFragment extends Fragment {
 
-    public static final String TAG = "NotasFragment";
+    public static final String TAG = "AsignaturaFragment";
 
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView mNotasView;
     private NotaRecyclerViewAdapter mNotasAdapter;
-    private List<Nota> mNotas;
+    private Asignatura mAsignatura;
 
-    public NotasFragment() {
+    public AsignaturaFragment() {
         // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of this fragment
      *
-     * @return A new instance of fragment NotasFragment.
+     * @return A new instance of fragment AsignaturaFragment.
      */
-    public static NotasFragment newInstance() {
-        /** /NotasFragment fragment =
+    public static AsignaturaFragment newInstance() {
+        /** /AsignaturaFragment fragment =
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);/**/
-        return new NotasFragment();
+        return new AsignaturaFragment();
     }
 
     @Override
@@ -65,18 +66,17 @@ public class NotasFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }/**/
         setHasOptionsMenu(true);
-        if (mNotas == null) mNotas = new ArrayList<>();
+        if (mAsignatura == null) mAsignatura = new Asignatura();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notas, container, false);
 
-        //TODO MODEL
         TextView nombreView = (TextView) view.findViewById(R.id.asignatura_nombre);
-        nombreView.setText(String.valueOf("Asignatura"));
+        nombreView.setText(mAsignatura.getNombre());
         TextView promedioView = (TextView) view.findViewById(R.id.asignatura_promedio);
-        promedioView.setText(String.valueOf(3.2));
+        promedioView.setText(String.valueOf(mAsignatura.getDefinitiva()));
         ImageButton addNotaButton = (ImageButton) view.findViewById(R.id.agregar);
         addNotaButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +88,7 @@ public class NotasFragment extends Fragment {
         mNotasView = (RecyclerView) view.findViewById(R.id.list_notas);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mNotasView.setLayoutManager(layoutManager);
-        mNotasAdapter = new NotaRecyclerViewAdapter(mNotas, mListener);
+        mNotasAdapter = new NotaRecyclerViewAdapter(mAsignatura.getNotas(), mListener);
         mNotasView.setAdapter(mNotasAdapter);
 
         return view;
@@ -130,10 +130,10 @@ public class NotasFragment extends Fragment {
 
 
 
-    public void setNotas(List<Nota> notas) {
-        mNotas = notas;
+    public void setAsignatura(Asignatura asignatura) {
+        mAsignatura = asignatura;
         if (mNotasAdapter != null) {
-            mNotasAdapter.animateTo(notas);
+            mNotasAdapter.animateTo(asignatura.getNotas());
             mNotasView.scrollToPosition(0);
         }
     }
@@ -141,7 +141,7 @@ public class NotasFragment extends Fragment {
     public void addNota(Nota nota) {
         nota = mListener.onAddNota(nota);
         if (mNotasAdapter != null) mNotasAdapter.addItem(nota);
-        mNotasView.scrollToPosition(mNotas.size()-1);
+        mNotasView.scrollToPosition(mAsignatura.getNotas().size()-1);
     }
 
     /**

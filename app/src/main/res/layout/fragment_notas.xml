@@ -43,6 +43,6 @@
         android:layout_height="wrap_content"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/nota_peso_list_item"
-        tools:context=".view.NotasFragment" />
+        tools:context=".view.AsignaturaFragment" />
 
 </LinearLayout>
