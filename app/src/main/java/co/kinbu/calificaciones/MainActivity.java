@@ -1,6 +1,7 @@
 package co.kinbu.calificaciones;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -29,13 +30,13 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         initInstances();
 
-        mRealm.beginTransaction();
+        /*mRealm.beginTransaction();
         for (int i = 0; i < 3; i++) {
             Nota nota = mRealm.createObject(Nota.class);
             nota.setValor(1 + i);
             nota.setPeso(20 - i);
         }
-        mRealm.commitTransaction();
+        mRealm.commitTransaction();*/
 
         List<Nota> notas = new ArrayList<>();
         notas.addAll(mRealm.allObjects(Nota.class));
@@ -70,8 +71,20 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDeleteNota(Nota nota) {
-        //TODO remove nota from db
+    public Nota onAddNota(@NonNull Nota nota) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ new NotasManager().toString(nota));
+        mRealm.beginTransaction();
+        Nota notaRealm = mRealm.copyToRealm(nota);
+        mRealm.commitTransaction();
+        return notaRealm;
+    }
+
+    @Override
+    public void onDeleteNota(Nota nota) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ new NotasManager().toString(nota));
+        if (nota == null) return;
+        mRealm.beginTransaction();
+        nota.removeFromRealm();
+        mRealm.commitTransaction();
     }
 }

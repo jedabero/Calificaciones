@@ -138,7 +138,8 @@ public class NotasFragment extends Fragment {
         }
     }
 
-    public void addNota(Nota nota) {//TODO save to db
+    public void addNota(Nota nota) {
+        nota = mListener.onAddNota(nota);
         if (mNotasAdapter != null) mNotasAdapter.addItem(nota);
         mNotasView.scrollToPosition(mNotas.size()-1);
     }
@@ -152,5 +153,6 @@ public class NotasFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Nota nota);
         void onDeleteNota(Nota nota);
+        Nota onAddNota(Nota nota);
     }
 }
