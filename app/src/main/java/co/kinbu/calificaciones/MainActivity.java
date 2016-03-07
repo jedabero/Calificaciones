@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements
         initInstances();
 
         mRealm.beginTransaction();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 3; i++) {
             Nota nota = mRealm.createObject(Nota.class);
             nota.setValor(1 + i);
             nota.setPeso(20 - i);

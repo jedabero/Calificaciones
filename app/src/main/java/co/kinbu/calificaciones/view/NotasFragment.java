@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class NotasFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }/**/
+        setHasOptionsMenu(true);
         if (mNotas == null) mNotas = new ArrayList<>();
     }
 
@@ -75,8 +77,13 @@ public class NotasFragment extends Fragment {
         nombreView.setText(String.valueOf("Asignatura"));
         TextView promedioView = (TextView) view.findViewById(R.id.asignatura_promedio);
         promedioView.setText(String.valueOf(3.2));
-
-        registerForContextMenu(view.findViewById(R.id.asignatura_detalles));
+        ImageButton addNotaButton = (ImageButton) view.findViewById(R.id.agregar);
+        addNotaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNota(new Nota());
+            }
+        });
 
         mNotasView = (RecyclerView) view.findViewById(R.id.list_notas);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -88,19 +95,19 @@ public class NotasFragment extends Fragment {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.menu_nota, menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_nota, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.opcion_agregar:
-
+                addNota(new Nota());
                 return true;
             default:
-                return super.onContextItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -121,6 +128,8 @@ public class NotasFragment extends Fragment {
         mListener = null;
     }
 
+
+
     public void setNotas(List<Nota> notas) {
         mNotas = notas;
         if (mNotasAdapter != null) {
@@ -129,9 +138,9 @@ public class NotasFragment extends Fragment {
         }
     }
 
-    public void addNota(Nota nota) {
-        mNotas.add(nota);
+    public void addNota(Nota nota) {//TODO save to db
         if (mNotasAdapter != null) mNotasAdapter.addItem(nota);
+        mNotasView.scrollToPosition(mNotas.size()-1);
     }
 
     /**

@@ -1,5 +1,6 @@
 package co.kinbu.calificaciones;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,11 +56,15 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         return notas.size();
     }
 
+    @Nullable
     public Nota removeItem (int position) {
-        final Nota n = notas.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, notas.size());
-        return n;
+        if (position < notas.size()) {
+            final Nota n = notas.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, notas.size());
+            return n;
+        }
+        return null;
     }
 
     public void addItem(Nota n) {
