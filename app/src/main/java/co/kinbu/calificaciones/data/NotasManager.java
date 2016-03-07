@@ -23,7 +23,6 @@ public class NotasManager {
 
         if (Double.compare(nota.getValor(), n.getValor()) != 0) return false;
         return n.getPeso() == nota.getPeso();
-
     }
 
     public static int hashCode(Nota n) {
@@ -45,7 +44,7 @@ public class NotasManager {
         return nota;
     }
 
-    public String toString(Nota n) {
+    public static String toString(Nota n) {
         return "Nota" + toJSON(n);
     }
 

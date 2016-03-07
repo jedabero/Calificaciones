@@ -67,12 +67,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onFragmentInteraction(Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ new NotasManager().toString(nota));
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
     }
 
     @Override
     public Nota onAddNota(@NonNull Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ new NotasManager().toString(nota));
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
         mRealm.beginTransaction();
         Nota notaRealm = mRealm.copyToRealm(nota);
         mRealm.commitTransaction();
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDeleteNota(Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ new NotasManager().toString(nota));
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
         if (nota == null) return;
         mRealm.beginTransaction();
         nota.removeFromRealm();

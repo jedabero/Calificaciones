@@ -11,6 +11,16 @@ public class Nota extends RealmObject {
     private double valor;
     private int peso;
 
+    public Nota() {
+        this(0d, 1);
+    }
+
+    public Nota(double valor, int peso) {
+        this.valor = valor;
+        if (peso < 1) peso = 1;
+        this.peso = peso;
+    }
+
     public double getValor() {
         return valor;
     }
