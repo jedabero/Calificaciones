@@ -17,6 +17,17 @@ public class AsignaturasManager {
 
     }
 
+    public static void actualizarDefinitiva(Asignatura asignatura) {
+        double definitiva = 0;
+        int pesoTotal = 0;
+        for (Nota nota : asignatura.getNotas()) {
+            definitiva += nota.getValor()*nota.getPeso();
+            pesoTotal += nota.getPeso();
+        }
+        definitiva /= pesoTotal;
+        asignatura.setDefinitiva(definitiva);
+    }
+
     public static boolean equals(Asignatura me, Object o) {
         if (me == o) return true;
         if (!(o instanceof Asignatura)) return false;

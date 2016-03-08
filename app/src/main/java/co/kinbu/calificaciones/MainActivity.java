@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import co.kinbu.calificaciones.data.AsignaturasManager;
 import co.kinbu.calificaciones.data.NotasManager;
 import co.kinbu.calificaciones.data.model.Asignatura;
 import co.kinbu.calificaciones.data.model.Nota;
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity implements
     private RealmConfiguration mRealmConfig;
     private FragmentManager mFragmentManager;
 
+    private AsignaturaFragment asignaturaFragment;
+    private Asignatura asignatura;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements
         initInstances();
 
         mRealm.beginTransaction();
-        Asignatura asignatura = mRealm.createObject(Asignatura.class);
+        asignatura = mRealm.createObject(Asignatura.class);
         asignatura.setNombre("Teoria de Automatas");
         double definitiva = 0;
         int pesoTotal = 0;
@@ -45,14 +49,14 @@ public class MainActivity extends AppCompatActivity implements
         asignatura.setDefinitiva(definitiva);
         mRealm.commitTransaction();
 
-        AsignaturaFragment fragment = AsignaturaFragment.newInstance();
-        fragment.setArguments(getIntent().getExtras());
+        asignaturaFragment = AsignaturaFragment.newInstance();
+        asignaturaFragment.setArguments(getIntent().getExtras());
 
-        String backstack = fragment.getClass().getName();
-        mFragmentManager.beginTransaction().add(R.id.fragment_container, fragment, backstack)
+        String backstack = asignaturaFragment.getClass().getName();
+        mFragmentManager.beginTransaction().add(R.id.fragment_container, asignaturaFragment, backstack)
                 .addToBackStack(backstack).commit();
 
-        fragment.setAsignatura(asignatura);
+        asignaturaFragment.setAsignatura(asignatura);
     }
 
     private void initInstances() {
@@ -95,11 +99,21 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onNotaValorListener(Nota n, Double s) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onNotaValorListener: " + n + ", newValor:" + s);
+        mRealm.beginTransaction();
+        n.setValor(s);
+        AsignaturasManager.actualizarDefinitiva(asignatura);
+        mRealm.commitTransaction();
+        asignaturaFragment.updatePromedio();
     }
 
     @Override
     public void onNotaPesoListener(Nota n, Integer s) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onNotaValorListener: " + n + ", newPeso:" + s);
+        mRealm.beginTransaction();
+        n.setPeso(s);
+        AsignaturasManager.actualizarDefinitiva(asignatura);
+        mRealm.commitTransaction();
+        asignaturaFragment.updatePromedio();
     }
 
 }

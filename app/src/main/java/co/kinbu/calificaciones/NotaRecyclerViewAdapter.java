@@ -43,10 +43,10 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
     public void onBindViewHolder(final NotaHolder holder, final int position) {
         holder.nota = notas.get(position);
         holder.valorText.setText(String.valueOf(holder.nota.getValor()));
-        holder.valorText.addTextChangedListener(new NotaValorWatcher(holder.nota));
         holder.pesoText.setText(String.valueOf(holder.nota.getPeso()));
-        holder.pesoText.addTextChangedListener(new NotaPesoWatcher(holder.nota));
 
+        holder.valorText.addTextChangedListener(new NotaValorWatcher(holder.nota));
+        holder.pesoText.addTextChangedListener(new NotaPesoWatcher(holder.nota));
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,10 +169,14 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
 
         @Override
         public void afterTextChanged(Editable s) {
-            Double oldValor = Double.parseDouble(oldText);
-            Double newValor = Double.parseDouble(newText);
-            if (oldValor.compareTo(newValor) != 0) {
-                mListener.onNotaValorListener(this.mNota, newValor);
+            try {
+                Double oldValor = Double.parseDouble(oldText);
+                Double newValor = Double.parseDouble(newText);
+                if (newValor.compareTo(oldValor) != 0) {
+                    mListener.onNotaValorListener(this.mNota, newValor);
+                }
+            } catch (NumberFormatException nfe) {
+                if (BuildConfig.DEBUG) nfe.printStackTrace();
             }
         }
 
@@ -186,10 +190,14 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
 
         @Override
         public void afterTextChanged(Editable s) {
-            Integer oldValor = Integer.parseInt(oldText);
-            Integer newValor = Integer.parseInt(newText);
-            if (oldValor.compareTo(newValor) != 0) {
-                mListener.onNotaPesoListener(this.mNota, newValor);
+            try {
+                Integer oldValor = Integer.parseInt(oldText);
+                Integer newValor = Integer.parseInt(newText);
+                if (oldValor.compareTo(newValor) != 0) {
+                    mListener.onNotaPesoListener(this.mNota, newValor);
+                }
+            } catch (NumberFormatException nfe) {
+                if (BuildConfig.DEBUG) nfe.printStackTrace();
             }
         }
 

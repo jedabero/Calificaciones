@@ -36,6 +36,7 @@ public class AsignaturaFragment extends Fragment {
 
     private RecyclerView mNotasView;
     private NotaRecyclerViewAdapter mNotasAdapter;
+    private TextView mPromedioView;
     private Asignatura mAsignatura;
 
     public AsignaturaFragment() {
@@ -72,8 +73,8 @@ public class AsignaturaFragment extends Fragment {
 
         TextView nombreView = (TextView) view.findViewById(R.id.asignatura_nombre);
         nombreView.setText(mAsignatura.getNombre());
-        TextView promedioView = (TextView) view.findViewById(R.id.asignatura_promedio);
-        promedioView.setText(String.valueOf(mAsignatura.getDefinitiva()));
+        mPromedioView = (TextView) view.findViewById(R.id.asignatura_promedio);
+        updatePromedio();
         ImageButton addNotaButton = (ImageButton) view.findViewById(R.id.agregar);
         addNotaButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +126,9 @@ public class AsignaturaFragment extends Fragment {
         mListener = null;
     }
 
-
+    public void updatePromedio() {
+        mPromedioView.setText(String.valueOf(mAsignatura.getDefinitiva()));
+    }
 
     public void setAsignatura(Asignatura asignatura) {
         mAsignatura = asignatura;
