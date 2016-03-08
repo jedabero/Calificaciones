@@ -3,6 +3,8 @@ package co.kinbu.calificaciones;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +43,9 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
     public void onBindViewHolder(final NotaHolder holder, final int position) {
         holder.nota = notas.get(position);
         holder.valorText.setText(String.valueOf(holder.nota.getValor()));
+        holder.valorText.addTextChangedListener(new NotaValorWatcher(holder.nota));
         holder.pesoText.setText(String.valueOf(holder.nota.getPeso()));
+        holder.pesoText.addTextChangedListener(new NotaPesoWatcher(holder.nota));
 
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +135,65 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
             pesoText = (TextInputEditText) view.findViewById(R.id.text_peso);
             removeButton = (ImageButton) view.findViewById(R.id.eliminar);
         }
+
     }
+
+    abstract class CustomTextWatcher implements TextWatcher {
+
+        protected String oldText;
+        protected String newText;
+
+        protected Nota mNota;
+
+        public CustomTextWatcher(Nota nota) {
+            this.mNota = nota;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            oldText = s.toString();
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            newText = s.toString();
+        }
+
+    }
+
+    class NotaValorWatcher extends CustomTextWatcher {
+
+        public NotaValorWatcher(Nota nota) {
+            super(nota);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Double oldValor = Double.parseDouble(oldText);
+            Double newValor = Double.parseDouble(newText);
+            if (oldValor.compareTo(newValor) != 0) {
+                mListener.onNotaValorListener(this.mNota, newValor);
+            }
+        }
+
+    }
+
+    class NotaPesoWatcher extends CustomTextWatcher {
+
+        public NotaPesoWatcher(Nota nota) {
+            super(nota);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Integer oldValor = Integer.parseInt(oldText);
+            Integer newValor = Integer.parseInt(newText);
+            if (oldValor.compareTo(newValor) != 0) {
+                mListener.onNotaPesoListener(this.mNota, newValor);
+            }
+        }
+
+    }
+
 }
 

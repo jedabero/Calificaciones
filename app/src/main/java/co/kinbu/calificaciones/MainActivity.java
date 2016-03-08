@@ -6,9 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.kinbu.calificaciones.data.NotasManager;
 import co.kinbu.calificaciones.data.model.Asignatura;
 import co.kinbu.calificaciones.data.model.Nota;
@@ -94,4 +91,15 @@ public class MainActivity extends AppCompatActivity implements
         nota.removeFromRealm();
         mRealm.commitTransaction();
     }
+
+    @Override
+    public void onNotaValorListener(Nota n, Double s) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "onNotaValorListener: " + n + ", newValor:" + s);
+    }
+
+    @Override
+    public void onNotaPesoListener(Nota n, Integer s) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "onNotaValorListener: " + n + ", newPeso:" + s);
+    }
+
 }

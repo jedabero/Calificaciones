@@ -14,9 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.kinbu.calificaciones.NotaRecyclerViewAdapter;
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.model.Asignatura;
@@ -154,5 +151,7 @@ public class AsignaturaFragment extends Fragment {
         void onFragmentInteraction(Nota nota);
         void onDeleteNota(Nota nota);
         Nota onAddNota(Nota nota);
+        void onNotaValorListener(Nota n, Double s);
+        void onNotaPesoListener(Nota n, Integer s);
     }
 }
