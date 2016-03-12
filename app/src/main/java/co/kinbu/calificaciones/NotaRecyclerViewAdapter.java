@@ -50,7 +50,7 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onDeleteNota(removeItem(position));
+                removeItem(position);
             }
         });
     }
@@ -60,15 +60,13 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         return notas.size();
     }
 
-    @Nullable
-    public Nota removeItem (int position) {
+    public void removeItem (int position) {
         if (position < notas.size()) {
-            final Nota n = notas.remove(position);
+            final Nota n = notas.get(position);
+            mListener.onDeleteNota(n);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, notas.size());
-            return n;
         }
-        return null;
     }
 
     public void addItem(Nota n) {

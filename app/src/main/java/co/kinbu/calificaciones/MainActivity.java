@@ -79,12 +79,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public Nota onAddNota(@NonNull Nota nota) {
+    public void onAddNota(@NonNull Asignatura asignatura, @NonNull Nota nota) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
         mRealm.beginTransaction();
-        Nota notaRealm = mRealm.copyToRealm(nota);
+        asignatura.getNotas().add(nota);
         mRealm.commitTransaction();
-        return notaRealm;
     }
 
     @Override
