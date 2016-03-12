@@ -1,6 +1,5 @@
 package co.kinbu.calificaciones;
 
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -142,9 +141,11 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         protected String newText;
 
         protected Nota mNota;
+        protected AfterTextChangedWorker mWorker;
 
-        public CustomTextWatcher(Nota nota) {
+        public CustomTextWatcher(Nota nota, AfterTextChangedWorker worker) {
             this.mNota = nota;
+            this.mWorker = worker;
         }
 
         @Override
@@ -157,25 +158,51 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
             newText = s.toString();
         }
 
+        @Override
+        public void afterTextChanged(Editable s) {
+            try {
+                Number oldValor = null;
+                try {
+                    oldValor = mWorker.parseNumber(oldText);
+                } catch (NumberFormatException nfe) {
+                    if (BuildConfig.DEBUG) nfe.printStackTrace();
+                }
+                Number newValor = mWorker.parseNumber(newText);
+                if (oldValor == null || mWorker.compare(newValor, oldValor) != 0) {
+                    mWorker.callListener(mNota, newValor);
+                }
+            } catch (NumberFormatException nfe) {
+                if (BuildConfig.DEBUG) nfe.printStackTrace();
+            }
+        }
+
+    }
+
+    private interface AfterTextChangedWorker {
+        void callListener(Nota n, Number newValor);
+        Number parseNumber(String n);
+        int compare(Number newValor, Number oldValor);
     }
 
     class NotaValorWatcher extends CustomTextWatcher {
 
         public NotaValorWatcher(Nota nota) {
-            super(nota);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            try {
-                Double oldValor = Double.parseDouble(oldText);
-                Double newValor = Double.parseDouble(newText);
-                if (newValor.compareTo(oldValor) != 0) {
-                    mListener.onNotaValorListener(this.mNota, newValor);
+            super(nota, new AfterTextChangedWorker() {
+                @Override
+                public void callListener(Nota n, Number newValor) {
+                    mListener.onNotaValorListener(n, (Double) newValor);
                 }
-            } catch (NumberFormatException nfe) {
-                if (BuildConfig.DEBUG) nfe.printStackTrace();
-            }
+
+                @Override
+                public Number parseNumber(String n) {
+                    return Double.parseDouble(n);
+                }
+
+                @Override
+                public int compare(Number newValor, Number oldValor) {
+                    return ((Double) newValor).compareTo((Double) oldValor);
+                }
+            });
         }
 
     }
@@ -183,20 +210,22 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
     class NotaPesoWatcher extends CustomTextWatcher {
 
         public NotaPesoWatcher(Nota nota) {
-            super(nota);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            try {
-                Integer oldValor = Integer.parseInt(oldText);
-                Integer newValor = Integer.parseInt(newText);
-                if (oldValor.compareTo(newValor) != 0) {
-                    mListener.onNotaPesoListener(this.mNota, newValor);
+            super(nota, new AfterTextChangedWorker() {
+                @Override
+                public void callListener(Nota n, Number newValor) {
+                    mListener.onNotaPesoListener(n, (Integer) newValor);
                 }
-            } catch (NumberFormatException nfe) {
-                if (BuildConfig.DEBUG) nfe.printStackTrace();
-            }
+
+                @Override
+                public Number parseNumber(String n) {
+                    return Integer.parseInt(n);
+                }
+
+                @Override
+                public int compare(Number newValor, Number oldValor) {
+                    return ((Integer) newValor).compareTo((Integer) oldValor);
+                }
+            });
         }
 
     }

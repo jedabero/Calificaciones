@@ -143,7 +143,7 @@ public class AsignaturaFragment extends Fragment {
     }
 
     public void addNota(Nota nota) {
-        mListener.onAddNota(mAsignatura, nota);
+        mListener.onAddNota(nota);
         if (mNotasAdapter != null)
             mNotasAdapter.notifyItemInserted(mAsignatura.getNotas().size());
         mNotasView.scrollToPosition(mAsignatura.getNotas().size());
@@ -158,7 +158,7 @@ public class AsignaturaFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Nota nota);
         void onDeleteNota(Nota nota);
-        void onAddNota(Asignatura asignatura, Nota nota);
+        void onAddNota(Nota nota);
         void onNotaValorListener(Nota n, Double s);
         void onNotaPesoListener(Nota n, Integer s);
     }
