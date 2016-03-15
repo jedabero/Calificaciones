@@ -2,9 +2,11 @@ package co.kinbu.calificaciones.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import co.kinbu.calificaciones.NotaRecyclerViewAdapter;
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.model.Asignatura;
 import co.kinbu.calificaciones.data.model.Nota;
+import co.kinbu.calificaciones.util.CustomTextWatcher;
 
 
 /**
@@ -36,7 +39,9 @@ public class AsignaturaFragment extends Fragment {
 
     private RecyclerView mNotasView;
     private NotaRecyclerViewAdapter mNotasAdapter;
+    private TextInputEditText mNombreView;
     private TextView mPromedioView;
+    private ImageButton addNotaButton;
     private Asignatura mAsignatura;
 
     public AsignaturaFragment() {
@@ -69,13 +74,21 @@ public class AsignaturaFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notas, container, false);
+        View view = inflater.inflate(R.layout.fragment_asignatura, container, false);
+        initInstances(view);
 
-        TextView nombreView = (TextView) view.findViewById(R.id.asignatura_nombre);
-        nombreView.setText(mAsignatura.getNombre());
-        mPromedioView = (TextView) view.findViewById(R.id.asignatura_promedio);
+        mNombreView.setText(mAsignatura.getNombre());
+        mNombreView.addTextChangedListener(new CustomTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (newText.compareTo(oldText) != 0 && !newText.isEmpty()) {
+                    mListener.onAsignaturaNombreChange(newText, mAsignatura);
+                }
+            }
+        });
+
         updatePromedio();
-        ImageButton addNotaButton = (ImageButton) view.findViewById(R.id.agregar);
+
         addNotaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,13 +98,19 @@ public class AsignaturaFragment extends Fragment {
             }
         });
 
-        mNotasView = (RecyclerView) view.findViewById(R.id.list_notas);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mNotasView.setLayoutManager(layoutManager);
-        mNotasAdapter = new NotaRecyclerViewAdapter(mAsignatura.getNotas(), mListener);
         mNotasView.setAdapter(mNotasAdapter);
 
         return view;
+    }
+
+    private void initInstances(View v) {
+        mNombreView = (TextInputEditText) v.findViewById(R.id.asignatura_nombre);
+        mPromedioView = (TextView) v.findViewById(R.id.asignatura_promedio);
+        addNotaButton = (ImageButton) v.findViewById(R.id.agregar);
+        mNotasView = (RecyclerView) v.findViewById(R.id.list_notas);
+        mNotasAdapter = new NotaRecyclerViewAdapter(mAsignatura.getNotas(), mListener);
     }
 
     @Override
@@ -131,7 +150,8 @@ public class AsignaturaFragment extends Fragment {
     }
 
     public void updatePromedio() {
-        mPromedioView.setText(String.valueOf(mAsignatura.getDefinitiva()));
+        String p = String.format("%,.2f" , mAsignatura.getDefinitiva());
+        mPromedioView.setText(p);
     }
 
     public void setAsignatura(Asignatura asignatura) {
@@ -157,6 +177,7 @@ public class AsignaturaFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Nota nota);
+        void onAsignaturaNombreChange(String nombre, Asignatura asignatura);
         void onDeleteNota(Nota nota);
         void onAddNota(Nota nota);
         void onNotaValorListener(Nota n, Double s);

@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:hint="@string/label_peso"
-            tools:text="0.0" />
+            tools:text="0" />
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton android:id="@+id/eliminar"
@@ -38,6 +38,5 @@
         android:background="?android:attr/selectableItemBackground"
         android:src="@android:drawable/ic_delete"
         android:contentDescription="@android:string/cancel" />
-
 
 </LinearLayout>

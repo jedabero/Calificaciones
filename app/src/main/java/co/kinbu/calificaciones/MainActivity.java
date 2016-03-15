@@ -33,20 +33,23 @@ public class MainActivity extends AppCompatActivity implements
         initInstances();
 
         mRealm.beginTransaction();
-        asignatura = mRealm.createObject(Asignatura.class);
-        asignatura.setNombre("Teoria de Automatas");
-        double definitiva = 0;
-        int pesoTotal = 0;
-        for (int i = 0; i < 3; i++) {
-            Nota nota = mRealm.createObject(Nota.class);
-            nota.setValor(2 + i);
-            nota.setPeso(4 - i);
-            asignatura.getNotas().add(nota);
-            definitiva += nota.getValor()*nota.getPeso();
-            pesoTotal += nota.getPeso();
+        asignatura = mRealm.where(Asignatura.class).findFirst();
+        if (asignatura == null) {
+            asignatura = mRealm.createObject(Asignatura.class);
+            asignatura.setNombre("Teoria de Automatas");
+            double definitiva = 0;
+            int pesoTotal = 0;
+            for (int i = 0; i < 3; i++) {
+                Nota nota = mRealm.createObject(Nota.class);
+                nota.setValor(2 + i);
+                nota.setPeso(3 + i);
+                asignatura.getNotas().add(nota);
+                definitiva += nota.getValor()*nota.getPeso();
+                pesoTotal += nota.getPeso();
+            }
+            definitiva /= pesoTotal;
+            asignatura.setDefinitiva(definitiva);
         }
-        definitiva /= pesoTotal;
-        asignatura.setDefinitiva(definitiva);
         mRealm.commitTransaction();
 
         asignaturaFragment = AsignaturaFragment.newInstance();
@@ -76,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Nota nota) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
+    }
+
+    @Override
+    public void onAsignaturaNombreChange(String nombre, Asignatura asignatura) {
+        mRealm.beginTransaction();
+        asignatura.setNombre(nombre);
+        mRealm.commitTransaction();
     }
 
     @Override

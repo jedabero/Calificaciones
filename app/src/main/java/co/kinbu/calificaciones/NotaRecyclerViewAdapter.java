@@ -3,7 +3,6 @@ package co.kinbu.calificaciones;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.ImageButton;
 import java.util.List;
 
 import co.kinbu.calificaciones.data.model.Nota;
+import co.kinbu.calificaciones.util.CustomTextWatcher;
 import co.kinbu.calificaciones.view.AsignaturaFragment.OnFragmentInteractionListener;
 
 /**
@@ -135,27 +135,14 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
 
     }
 
-    abstract class CustomTextWatcher implements TextWatcher {
-
-        protected String oldText;
-        protected String newText;
+    abstract class NumberTextWatcher extends CustomTextWatcher {
 
         protected Nota mNota;
         protected AfterTextChangedWorker mWorker;
 
-        public CustomTextWatcher(Nota nota, AfterTextChangedWorker worker) {
+        public NumberTextWatcher(Nota nota, AfterTextChangedWorker worker) {
             this.mNota = nota;
             this.mWorker = worker;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            oldText = s.toString();
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            newText = s.toString();
         }
 
         @Override
@@ -184,7 +171,7 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
         int compare(Number newValor, Number oldValor);
     }
 
-    class NotaValorWatcher extends CustomTextWatcher {
+    class NotaValorWatcher extends NumberTextWatcher {
 
         public NotaValorWatcher(Nota nota) {
             super(nota, new AfterTextChangedWorker() {
@@ -207,7 +194,7 @@ public class NotaRecyclerViewAdapter extends RecyclerView.Adapter<NotaRecyclerVi
 
     }
 
-    class NotaPesoWatcher extends CustomTextWatcher {
+    class NotaPesoWatcher extends NumberTextWatcher {
 
         public NotaPesoWatcher(Nota nota) {
             super(nota, new AfterTextChangedWorker() {
