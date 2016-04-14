@@ -29,8 +29,11 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
             android:padding="@dimen/default_gap"
             style="?android:textAppearance"
+            android:textSize="24sp"
             tools:text="3.2" />
 
         <ImageButton android:id="@+id/agregar"
