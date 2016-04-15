@@ -8,8 +8,8 @@ import java.util.UUID;
  */
 public class Nota {
 
-    public String id;
-    public String asignaturaId;
+    private String id;
+    private String asignaturaId;
 
     private double valor;
     private int peso;

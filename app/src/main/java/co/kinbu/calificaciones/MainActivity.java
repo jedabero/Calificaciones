@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import co.kinbu.calificaciones.data.AsignaturasManager;
-import co.kinbu.calificaciones.data.NotasManager;
 import co.kinbu.calificaciones.data.Asignatura;
+import co.kinbu.calificaciones.data.AsignaturasManager;
 import co.kinbu.calificaciones.data.Nota;
+import co.kinbu.calificaciones.data.NotasManager;
 import co.kinbu.calificaciones.view.AsignaturaFragment;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
