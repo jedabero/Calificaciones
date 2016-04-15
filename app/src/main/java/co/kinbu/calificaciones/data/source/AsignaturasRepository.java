@@ -47,14 +47,15 @@ public class AsignaturasRepository implements AsignaturasDataSource {
 
 
     @Override
-    public void getAsignaturas(@NonNull final LoadAsignaturasCallback callback) {
+    public void getAsignaturas(@NonNull NotasDataSource notasDataSource,
+                               @NonNull final LoadAsignaturasCallback callback) {
         checkNotNull(callback);
         if (mCachedAsignaturas != null && !mCacheIsDirty) {
             callback.onAsignaturasLoaded(new ArrayList<>(mCachedAsignaturas.values()));
             return;
         }
 
-        mAsignaturasLocalDataSource.getAsignaturas(new LoadAsignaturasCallback() {
+        mAsignaturasLocalDataSource.getAsignaturas(notasDataSource, new LoadAsignaturasCallback() {
             @Override
             public void onAsignaturasLoaded(List<Asignatura> asignaturas) {
                 refreshCache(asignaturas);
@@ -69,7 +70,8 @@ public class AsignaturasRepository implements AsignaturasDataSource {
     }
 
     @Override
-    public void getAsignatura(@NonNull String asignaturaId, @NonNull LoadAsignaturaCallback callback) {
+    public void getAsignatura(@NonNull String asignaturaId, @NonNull NotasDataSource notasDataSource,
+                              @NonNull LoadAsignaturaCallback callback) {
         checkNotNull(asignaturaId);
         checkNotNull(callback);
 
@@ -79,7 +81,7 @@ public class AsignaturasRepository implements AsignaturasDataSource {
             return;
         }
 
-        mAsignaturasLocalDataSource.getAsignatura(asignaturaId, callback);
+        mAsignaturasLocalDataSource.getAsignatura(asignaturaId, notasDataSource, callback);
     }
 
     @Override

@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.kinbu.calificaciones.data.Asignatura;
+import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.data.source.AsignaturasDataSource;
+import co.kinbu.calificaciones.data.source.NotasDataSource;
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.AsignaturaEntry;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -38,7 +40,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
     }
 
     @Override
-    public void getAsignaturas(@NonNull LoadAsignaturasCallback callback) {
+    public void getAsignaturas(@NonNull NotasDataSource notasDataSource, @NonNull LoadAsignaturasCallback callback) {
         List<Asignatura> asignaturas = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -55,7 +57,18 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
                 String nombre = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_NOMBRE));
                 Double definitiva = c.getDouble(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_DEFINITIVA));
 
-                Asignatura asignatura = new Asignatura(id, nombre, definitiva);
+                final Asignatura asignatura = new Asignatura(id, nombre, definitiva);
+                notasDataSource.getNotas(id, new NotasDataSource.LoadNotasCallback() {
+                    @Override
+                    public void onNotasLoaded(List<Nota> notas) {
+                        asignatura.setNotas(notas);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+
+                    }
+                });
                 asignaturas.add(asignatura);
             }
         }
@@ -72,7 +85,8 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
     }
 
     @Override
-    public void getAsignatura(@NonNull String asignaturaId, @NonNull LoadAsignaturaCallback callback) {
+    public void getAsignatura(@NonNull String asignaturaId, @NonNull NotasDataSource notasDataSource,
+                              @NonNull LoadAsignaturaCallback callback) {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -85,13 +99,26 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
 
         Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
 
-        Asignatura asignatura = null;
+        final Asignatura asignatura;
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
             String nombre = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_NOMBRE));
             Double definitiva = c.getDouble(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_DEFINITIVA));
 
             asignatura = new Asignatura(asignaturaId, nombre, definitiva);
+            notasDataSource.getNotas(asignaturaId, new NotasDataSource.LoadNotasCallback() {
+                @Override
+                public void onNotasLoaded(List<Nota> notas) {
+                    asignatura.setNotas(notas);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+
+                }
+            });
+        } else {
+            asignatura = null;
         }
         if (c != null) {
             c.close();
