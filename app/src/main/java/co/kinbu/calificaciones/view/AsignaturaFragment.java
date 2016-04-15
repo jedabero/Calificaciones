@@ -93,7 +93,7 @@ public class AsignaturaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 v.setEnabled(false);
-                addNota(new Nota());
+                addNota();
                 v.setEnabled(true);
             }
         });
@@ -124,7 +124,7 @@ public class AsignaturaFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.opcion_agregar:
                 item.setEnabled(false);
-                addNota(new Nota());
+                addNota();
                 item.setEnabled(true);
                 return true;
             default:
@@ -162,8 +162,8 @@ public class AsignaturaFragment extends Fragment {
         }
     }
 
-    public void addNota(Nota nota) {
-        mListener.onAddNota(nota);
+    public void addNota() {
+        mListener.onAddNota();
         if (mNotasAdapter != null)
             mNotasAdapter.notifyItemInserted(mAsignatura.getNotas().size());
         mNotasView.scrollToPosition(mAsignatura.getNotas().size());
@@ -179,7 +179,7 @@ public class AsignaturaFragment extends Fragment {
         void onFragmentInteraction(Nota nota);
         void onAsignaturaNombreChange(String nombre, Asignatura asignatura);
         void onDeleteNota(Nota nota);
-        void onAddNota(Nota nota);
+        void onAddNota();
         void onNotaValorListener(Nota n, Double s);
         void onNotaPesoListener(Nota n, Integer s);
     }

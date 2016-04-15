@@ -24,13 +24,13 @@ public class Asignatura {
         this(UUID.randomUUID().toString(), nombre);
     }
 
-    public Asignatura(String uuid, String nombre) {
-        this.id = uuid;
-        this.nombre = nombre;
+    public Asignatura(String id, String nombre) {
+        this(id, nombre, 0d);
     }
 
     public Asignatura(String id, String nombre, double definitiva) {
-        this(id, nombre);
+        this.id = id;
+        this.nombre = nombre;
         this.definitiva = definitiva;
     }
 

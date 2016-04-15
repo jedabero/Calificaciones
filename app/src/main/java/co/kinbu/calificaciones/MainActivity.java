@@ -1,26 +1,31 @@
 package co.kinbu.calificaciones;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import co.kinbu.calificaciones.data.Asignatura;
 import co.kinbu.calificaciones.data.AsignaturasManager;
 import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.data.NotasManager;
+import co.kinbu.calificaciones.data.source.AsignaturasDataSource;
+import co.kinbu.calificaciones.data.source.AsignaturasRepository;
+import co.kinbu.calificaciones.data.source.NotasRepository;
+import co.kinbu.calificaciones.data.source.local.AsignaturasLocalDataSource;
+import co.kinbu.calificaciones.data.source.local.NotasLocalDataSource;
 import co.kinbu.calificaciones.view.AsignaturaFragment;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity implements
         AsignaturaFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
-    private Realm mRealm;
-    private RealmConfiguration mRealmConfig;
+    private AsignaturasRepository mAsignaturasRepository;
+    private NotasRepository mNotasRepository;
     private FragmentManager mFragmentManager;
 
     private AsignaturaFragment asignaturaFragment;
@@ -32,25 +37,26 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         initInstances();
 
-        mRealm.beginTransaction();
-        asignatura = mRealm.where(Asignatura.class).findFirst();
-        if (asignatura == null) {
-            asignatura = mRealm.createObject(Asignatura.class);
-            asignatura.setNombre("Teoria de Automatas");
-            double definitiva = 0;
-            int pesoTotal = 0;
-            for (int i = 0; i < 3; i++) {
-                Nota nota = mRealm.createObject(Nota.class);
-                nota.setValor(2 + i);
-                nota.setPeso(3 + i);
-                asignatura.getNotas().add(nota);
-                definitiva += nota.getValor()*nota.getPeso();
-                pesoTotal += nota.getPeso();
+        mAsignaturasRepository.getAsignaturas(mNotasRepository, new AsignaturasDataSource.LoadAsignaturasCallback() {
+            @Override
+            public void onAsignaturasLoaded(List<Asignatura> asignaturas) {
+                asignatura = asignaturas.get(0);
             }
-            definitiva /= pesoTotal;
-            asignatura.setDefinitiva(definitiva);
-        }
-        mRealm.commitTransaction();
+
+            @Override
+            public void onDataNotAvailable() {
+                asignatura = new Asignatura();
+                List<Nota> notas = new ArrayList<>();
+                for (int i = 0; i < 3; ++i) {
+                    Nota nota = new Nota(asignatura.getId());
+                    notas.add(nota);
+                    mNotasRepository.saveNota(nota);
+                }
+                asignatura.setNotas(notas);
+                AsignaturasManager.actualizarDefinitiva(asignatura);
+                mAsignaturasRepository.saveAsignatura(asignatura);
+            }
+        });
 
         asignaturaFragment = AsignaturaFragment.newInstance();
         asignaturaFragment.setArguments(getIntent().getExtras());
@@ -63,8 +69,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initInstances() {
-        mRealmConfig = new RealmConfiguration.Builder(this).build();
-        mRealm = Realm.getInstance(mRealmConfig);
+        mAsignaturasRepository = AsignaturasRepository.getInstance(
+                AsignaturasLocalDataSource.getINSTANCE(getApplicationContext()));
+        mAsignaturasRepository.refreshAsignaturas();
+        mNotasRepository= NotasRepository.getInstance(
+                NotasLocalDataSource.getINSTANCE(getApplicationContext()));
+        mNotasRepository.refreshNotas();
 
         mFragmentManager = getSupportFragmentManager();
     }
@@ -73,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mRealm != null) mRealm.close();
+        AsignaturasRepository.destroyInstance();
     }
 
     @Override
@@ -83,18 +93,17 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onAsignaturaNombreChange(String nombre, Asignatura asignatura) {
-        mRealm.beginTransaction();
         asignatura.setNombre(nombre);
-        mRealm.commitTransaction();
+        mAsignaturasRepository.updateAsignatura(asignatura);
     }
 
     @Override
-    public void onAddNota(@NonNull Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
-        mRealm.beginTransaction();
+    public void onAddNota() {
+        Nota nota = new Nota(asignatura.getId());
+        mNotasRepository.saveNota(nota);
         asignatura.getNotas().add(nota);
         AsignaturasManager.actualizarDefinitiva(asignatura);
-        mRealm.commitTransaction();
+        mAsignaturasRepository.updateAsignatura(asignatura);
         asignaturaFragment.updatePromedio();
     }
 
@@ -102,30 +111,30 @@ public class MainActivity extends AppCompatActivity implements
     public void onDeleteNota(Nota nota) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: " + NotasManager.toString(nota));
         if (nota == null) return;
-        mRealm.beginTransaction();
-        nota.removeFromRealm();
+        mNotasRepository.deleteNota(nota.getId());
+        asignatura.getNotas().remove(asignatura.getNotas().indexOf(nota));
         AsignaturasManager.actualizarDefinitiva(asignatura);
-        mRealm.commitTransaction();
+        mAsignaturasRepository.updateAsignatura(asignatura);
         asignaturaFragment.updatePromedio();
     }
 
     @Override
     public void onNotaValorListener(Nota n, Double s) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onNotaValorListener: " + n + ", newValor:" + s);
-        mRealm.beginTransaction();
         n.setValor(s);
+        mNotasRepository.updateNota(n);
         AsignaturasManager.actualizarDefinitiva(asignatura);
-        mRealm.commitTransaction();
+        mAsignaturasRepository.updateAsignatura(asignatura);
         asignaturaFragment.updatePromedio();
     }
 
     @Override
     public void onNotaPesoListener(Nota n, Integer s) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onNotaValorListener: " + n + ", newPeso:" + s);
-        mRealm.beginTransaction();
         n.setPeso(s);
+        mNotasRepository.updateNota(n);
         AsignaturasManager.actualizarDefinitiva(asignatura);
-        mRealm.commitTransaction();
+        mAsignaturasRepository.updateAsignatura(asignatura);
         asignaturaFragment.updatePromedio();
     }
 

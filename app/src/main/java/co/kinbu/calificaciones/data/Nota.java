@@ -14,16 +14,17 @@ public class Nota {
     private double valor;
     private int peso;
 
-    public Nota() {
-        this(0d, 1);
+    public Nota(String asignaturaId) {
+        this(asignaturaId, 0d, 1);
     }
 
-    public Nota(double valor, int peso) {
-        this(UUID.randomUUID().toString(), valor, peso);
+    public Nota(String asignaturaId, double valor, int peso) {
+        this(UUID.randomUUID().toString(), asignaturaId, valor, peso);
     }
 
-    public Nota(String uuid, double valor, int peso) {
+    public Nota(String uuid, String asignaturaId, double valor, int peso) {
         this.id = uuid;
+        this.asignaturaId = asignaturaId;
         this.valor = valor;
         if (peso < 1) peso = 1;
         this.peso = peso;

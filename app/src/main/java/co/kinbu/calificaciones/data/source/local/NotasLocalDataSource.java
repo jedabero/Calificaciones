@@ -57,8 +57,7 @@ public class NotasLocalDataSource implements NotasDataSource {
                 Double valor = c.getDouble(c.getColumnIndex(NotaEntry.COLUMN_NAME_VALOR));
                 Integer peso = c.getInt(c.getColumnIndex(NotaEntry.COLUMN_NAME_PESO));
 
-                Nota nota = new Nota(id, valor, peso);
-                nota.setAsignaturaId(asignaturaId);
+                Nota nota = new Nota(id, asignaturaId, valor, peso);
                 notas.add(nota);
             }
         }
@@ -95,8 +94,7 @@ public class NotasLocalDataSource implements NotasDataSource {
                 Double valor = c.getDouble(c.getColumnIndex(NotaEntry.COLUMN_NAME_VALOR));
                 Integer peso = c.getInt(c.getColumnIndex(NotaEntry.COLUMN_NAME_PESO));
 
-                Nota nota = new Nota(id, valor, peso);
-                nota.setAsignaturaId(asignaturaId);
+                Nota nota = new Nota(id, asignaturaId, valor, peso);
                 notas.add(nota);
             }
         }
@@ -133,8 +131,7 @@ public class NotasLocalDataSource implements NotasDataSource {
             Double valor = c.getDouble(c.getColumnIndex(NotaEntry.COLUMN_NAME_VALOR));
             Integer peso = c.getInt(c.getColumnIndex(NotaEntry.COLUMN_NAME_PESO));
 
-            nota = new Nota(notaId, valor, peso);
-            nota.setAsignaturaId(asignaturaId);
+            nota = new Nota(notaId, asignaturaId, valor, peso);
         }
         if (c != null) {
             c.close();
