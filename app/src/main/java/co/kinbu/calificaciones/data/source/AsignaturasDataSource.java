@@ -13,12 +13,12 @@ import co.kinbu.calificaciones.data.Asignatura;
 public interface AsignaturasDataSource {
 
     interface LoadAsignaturasCallback {
-        void onNotasLoaded(List<Asignatura> asignaturas);
+        void onAsignaturasLoaded(List<Asignatura> asignaturas);
         void onDataNotAvailable();
     }
 
     interface LoadAsignaturaCallback {
-        void onNotaLoaded(Asignatura asignatura);
+        void onAsignaturaLoaded(Asignatura asignatura);
         void onDataNotAvailable();
     }
 
@@ -27,6 +27,8 @@ public interface AsignaturasDataSource {
     void getAsignatura(@NonNull String asignaturaId, @NonNull LoadAsignaturaCallback callback);
 
     void saveAsignatura(@NonNull Asignatura asignatura);
+
+    void updateAsignatura(@NonNull Asignatura asignatura);
 
     void deleteAsignatura(@NonNull String asignaturaId);
 

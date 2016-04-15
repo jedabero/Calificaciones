@@ -29,6 +29,11 @@ public class Asignatura {
         this.nombre = nombre;
     }
 
+    public Asignatura(String id, String nombre, double definitiva) {
+        this(id, nombre);
+        this.definitiva = definitiva;
+    }
+
     public String getId() {
         return id;
     }

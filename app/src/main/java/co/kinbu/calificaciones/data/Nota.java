@@ -29,8 +29,16 @@ public class Nota {
         this.peso = peso;
     }
 
-    public String getUuid() {
+    public String getId() {
         return id;
+    }
+
+    public String getAsignaturaId() {
+        return asignaturaId;
+    }
+
+    public void setAsignaturaId(String asignaturaId) {
+        this.asignaturaId = asignaturaId;
     }
 
     public double getValor() {

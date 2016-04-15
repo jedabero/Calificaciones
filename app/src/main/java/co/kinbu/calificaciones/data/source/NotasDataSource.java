@@ -30,6 +30,8 @@ public interface NotasDataSource {
 
     void saveNota(@NonNull Nota nota);
 
+    void updateNota(@NonNull Nota nota);
+
     void deleteNota(@NonNull String notaId);
 
 }
