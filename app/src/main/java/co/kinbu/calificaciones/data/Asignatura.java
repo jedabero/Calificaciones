@@ -1,6 +1,7 @@
 package co.kinbu.calificaciones.data;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Asignatura
@@ -8,10 +9,29 @@ import java.util.List;
  */
 public class Asignatura {
 
+    private String id;
+
     private String nombre;
     private double definitiva;
 
     private List<Nota> notas;
+
+    public Asignatura() {
+        this("Asignatura");
+    }
+
+    public Asignatura(String nombre) {
+        this(UUID.randomUUID().toString(), nombre);
+    }
+
+    public Asignatura(String uuid, String nombre) {
+        this.id = uuid;
+        this.nombre = nombre;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public String getNombre() {
         return nombre;

@@ -1,10 +1,15 @@
 package co.kinbu.calificaciones.data;
 
+import java.util.UUID;
+
 /**
  * Nota
  * Created by jedabero on 2/03/16.
  */
 public class Nota {
+
+    public String id;
+    public String asignaturaId;
 
     private double valor;
     private int peso;
@@ -14,9 +19,18 @@ public class Nota {
     }
 
     public Nota(double valor, int peso) {
+        this(UUID.randomUUID().toString(), valor, peso);
+    }
+
+    public Nota(String uuid, double valor, int peso) {
+        this.id = uuid;
         this.valor = valor;
         if (peso < 1) peso = 1;
         this.peso = peso;
+    }
+
+    public String getUuid() {
+        return id;
     }
 
     public double getValor() {
