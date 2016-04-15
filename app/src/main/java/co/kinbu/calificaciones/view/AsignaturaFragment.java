@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import co.kinbu.calificaciones.NotaRecyclerViewAdapter;
 import co.kinbu.calificaciones.R;
-import co.kinbu.calificaciones.data.model.Asignatura;
-import co.kinbu.calificaciones.data.model.Nota;
+import co.kinbu.calificaciones.data.Asignatura;
+import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.util.CustomTextWatcher;
 
 

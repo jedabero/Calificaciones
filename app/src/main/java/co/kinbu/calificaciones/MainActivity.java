@@ -8,8 +8,8 @@ import android.util.Log;
 
 import co.kinbu.calificaciones.data.AsignaturasManager;
 import co.kinbu.calificaciones.data.NotasManager;
-import co.kinbu.calificaciones.data.model.Asignatura;
-import co.kinbu.calificaciones.data.model.Nota;
+import co.kinbu.calificaciones.data.Asignatura;
+import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.view.AsignaturaFragment;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

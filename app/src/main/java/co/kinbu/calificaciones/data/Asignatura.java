@@ -1,4 +1,4 @@
-package co.kinbu.calificaciones.data.model;
+package co.kinbu.calificaciones.data;
 
 import java.util.List;
 

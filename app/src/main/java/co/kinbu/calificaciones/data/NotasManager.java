@@ -3,8 +3,6 @@ package co.kinbu.calificaciones.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import co.kinbu.calificaciones.data.model.Nota;
-
 /**
  * NotasManager
  * Created by jedabero on 3/03/16.

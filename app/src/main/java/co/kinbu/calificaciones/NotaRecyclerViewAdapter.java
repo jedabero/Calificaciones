@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 import java.util.List;
 
-import co.kinbu.calificaciones.data.model.Nota;
+import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.util.CustomTextWatcher;
 import co.kinbu.calificaciones.view.AsignaturaFragment.OnFragmentInteractionListener;
 

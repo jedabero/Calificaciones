@@ -4,9 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import co.kinbu.calificaciones.data.model.Asignatura;
-import co.kinbu.calificaciones.data.model.Nota;
-
 /**
  * AsignaturasManager
  * Created by jedabero on 6/03/16.
