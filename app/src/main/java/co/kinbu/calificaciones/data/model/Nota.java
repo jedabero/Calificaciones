@@ -1,12 +1,10 @@
 package co.kinbu.calificaciones.data.model;
 
-import io.realm.RealmObject;
-
 /**
  * Nota
  * Created by jedabero on 2/03/16.
  */
-public class Nota extends RealmObject {
+public class Nota {
 
     private double valor;
     private int peso;

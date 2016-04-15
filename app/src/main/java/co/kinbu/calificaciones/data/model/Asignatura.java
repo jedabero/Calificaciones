@@ -1,20 +1,17 @@
 package co.kinbu.calificaciones.data.model;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.Required;
+import java.util.List;
 
 /**
  * Asignatura
  * Created by jedabero on 6/03/16.
  */
-public class Asignatura extends RealmObject {
+public class Asignatura {
 
-    @Required
     private String nombre;
     private double definitiva;
 
-    private RealmList<Nota> notas;
+    private List<Nota> notas;
 
     public String getNombre() {
         return nombre;
@@ -32,11 +29,11 @@ public class Asignatura extends RealmObject {
         this.definitiva = definitiva;
     }
 
-    public RealmList<Nota> getNotas() {
+    public List<Nota> getNotas() {
         return notas;
     }
 
-    public void setNotas(RealmList<Nota> notas) {
+    public void setNotas(List<Nota> notas) {
         this.notas = notas;
     }
 
