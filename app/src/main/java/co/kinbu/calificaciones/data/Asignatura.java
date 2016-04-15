@@ -1,5 +1,6 @@
 package co.kinbu.calificaciones.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ public class Asignatura {
         this.id = id;
         this.nombre = nombre;
         this.definitiva = definitiva;
+        this.notas = new ArrayList<>();
     }
 
     public String getId() {
@@ -56,10 +58,6 @@ public class Asignatura {
 
     public List<Nota> getNotas() {
         return notas;
-    }
-
-    public void setNotas(List<Nota> notas) {
-        this.notas = notas;
     }
 
 }

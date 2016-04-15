@@ -61,7 +61,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
                 notasDataSource.getNotas(id, new NotasDataSource.LoadNotasCallback() {
                     @Override
                     public void onNotasLoaded(List<Nota> notas) {
-                        asignatura.setNotas(notas);
+                        asignatura.getNotas().addAll(notas);
                     }
 
                     @Override
@@ -109,7 +109,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
             notasDataSource.getNotas(asignaturaId, new NotasDataSource.LoadNotasCallback() {
                 @Override
                 public void onNotasLoaded(List<Nota> notas) {
-                    asignatura.setNotas(notas);
+                    asignatura.getNotas().addAll(notas);
                 }
 
                 @Override

@@ -19,7 +19,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String PRIMARY_KEY = " PRIMARY KEY";
     private static final String FOREIGN_KEY = " FOREIGN KEY";
-    private static final String REFERENCES = " REFERENCES";
+    private static final String REFERENCES = " REFERENCES ";
     private static final String TEXT = " TEXT";
     private static final String INTEGER = " INTEGER";
     private static final String REAL = " REAL";

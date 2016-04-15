@@ -52,11 +52,13 @@ public class MainActivity extends AppCompatActivity implements
                     notas.add(nota);
                     mNotasRepository.saveNota(nota);
                 }
-                asignatura.setNotas(notas);
+                asignatura.getNotas().addAll(notas);
                 AsignaturasManager.actualizarDefinitiva(asignatura);
                 mAsignaturasRepository.saveAsignatura(asignatura);
             }
         });
+
+        mFragmentManager.popBackStack();
 
         asignaturaFragment = AsignaturaFragment.newInstance();
         asignaturaFragment.setArguments(getIntent().getExtras());
