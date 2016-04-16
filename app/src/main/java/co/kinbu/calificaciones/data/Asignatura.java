@@ -11,26 +11,28 @@ import java.util.UUID;
 public class Asignatura {
 
     private String id;
+    private String periodoId;
 
     private String nombre;
     private double definitiva;
 
     private List<Nota> notas;
 
-    public Asignatura() {
-        this("Asignatura");
+    public Asignatura(String periodoId) {
+        this(periodoId, "Asignatura");
     }
 
-    public Asignatura(String nombre) {
-        this(UUID.randomUUID().toString(), nombre);
+    public Asignatura(String periodoId, String nombre) {
+        this(UUID.randomUUID().toString(), periodoId, nombre);
     }
 
-    public Asignatura(String id, String nombre) {
-        this(id, nombre, 0d);
+    public Asignatura(String id, String periodoId, String nombre) {
+        this(id, periodoId, nombre, 0d);
     }
 
-    public Asignatura(String id, String nombre, double definitiva) {
+    public Asignatura(String id, String periodoId, String nombre, double definitiva) {
         this.id = id;
+        this.periodoId = periodoId;
         this.nombre = nombre;
         this.definitiva = definitiva;
         this.notas = new ArrayList<>();
@@ -38,6 +40,10 @@ public class Asignatura {
 
     public String getId() {
         return id;
+    }
+
+    public String getPeriodoId() {
+        return periodoId;
     }
 
     public String getNombre() {

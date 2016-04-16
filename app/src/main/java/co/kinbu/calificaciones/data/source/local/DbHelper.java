@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import co.kinbu.calificaciones.data.source.local.PersistenceContract.PeriodoEntry;
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.AsignaturaEntry;
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
 
@@ -13,7 +14,7 @@ import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
  */
 public class DbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "calificaciones.db";
 
@@ -25,13 +26,37 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String REAL = " REAL";
     private static final String COMMA = ",";
 
+    private static final String SQL_CREATE_PERIODOS =
+            "CREATE TABLE " + AsignaturaEntry.TABLE_NAME + " (" +
+                    PeriodoEntry.COLUMN_NAME_ID + TEXT + PRIMARY_KEY + COMMA +
+                    PeriodoEntry.COLUMN_NAME_NOMBRE + TEXT + COMMA +
+                    PeriodoEntry.COLUMN_NAME_PROMEDIO + REAL +
+            ")";
 
     private static final String SQL_CREATE_ASIGNATURAS =
             "CREATE TABLE " + AsignaturaEntry.TABLE_NAME + " (" +
                     AsignaturaEntry.COLUMN_NAME_ID + TEXT + PRIMARY_KEY + COMMA +
+                    AsignaturaEntry.COLUMN_NAME_PERIODO_ID + TEXT + COMMA +
                     AsignaturaEntry.COLUMN_NAME_NOMBRE + TEXT + COMMA +
-                    AsignaturaEntry.COLUMN_NAME_DEFINITIVA + REAL +
+                    AsignaturaEntry.COLUMN_NAME_DEFINITIVA + REAL + COMMA +
+                    FOREIGN_KEY + "(" + AsignaturaEntry.COLUMN_NAME_PERIODO_ID + ") " + REFERENCES +
+                    PeriodoEntry.TABLE_NAME + " (" + PeriodoEntry.COLUMN_NAME_ID + ")" +
             ")";
+
+    private static final String SQL_DROP_ASIGNATURAS = "DROP TABLE " + AsignaturaEntry.TABLE_NAME;
+
+    private static final String SQL_TEMP_ASIGNATURAS_1 =
+            "CREATE TEMP TABLE temp_" + AsignaturaEntry.TABLE_NAME +
+                    " AS SELECT * FROM " + AsignaturaEntry.TABLE_NAME;
+
+    private static final String SQL_POPULATE_ASIGNATURAS_1 =
+            "INSERT INTO " + AsignaturaEntry.TABLE_NAME + " SELECT " +
+                    AsignaturaEntry.COLUMN_NAME_ID + COMMA +
+                    "0" +
+                    AsignaturaEntry.COLUMN_NAME_NOMBRE + COMMA +
+                    AsignaturaEntry.COLUMN_NAME_DEFINITIVA +
+                    " FROM temp_" + AsignaturaEntry.TABLE_NAME;
+
 
     private static final String SQL_CREATE_NOTAS =
             "CREATE TABLE " + NotaEntry.TABLE_NAME + " (" +
@@ -49,13 +74,20 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_PERIODOS);
         db.execSQL(SQL_CREATE_ASIGNATURAS);
         db.execSQL(SQL_CREATE_NOTAS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 2) {
+            db.execSQL(SQL_CREATE_PERIODOS);
+            db.execSQL(SQL_TEMP_ASIGNATURAS_1);
+            db.execSQL(SQL_DROP_ASIGNATURAS);
+            db.execSQL(SQL_CREATE_ASIGNATURAS);
+            db.execSQL(SQL_POPULATE_ASIGNATURAS_1);
+        }
     }
 
     @Override

@@ -38,10 +38,6 @@ public class Nota {
         return asignaturaId;
     }
 
-    public void setAsignaturaId(String asignaturaId) {
-        this.asignaturaId = asignaturaId;
-    }
-
     public double getValor() {
         return valor;
     }

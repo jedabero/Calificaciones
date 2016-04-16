@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,15 +48,14 @@ public class AsignaturasRepository implements AsignaturasDataSource {
 
 
     @Override
-    public void getAsignaturas(@NonNull NotasDataSource notasDataSource,
-                               @NonNull final LoadAsignaturasCallback callback) {
+    public void getAsignaturas(@NonNull final LoadAsignaturasCallback callback) {
         checkNotNull(callback);
         if (mCachedAsignaturas != null && !mCacheIsDirty) {
             callback.onAsignaturasLoaded(new ArrayList<>(mCachedAsignaturas.values()));
             return;
         }
 
-        mAsignaturasLocalDataSource.getAsignaturas(notasDataSource, new LoadAsignaturasCallback() {
+        mAsignaturasLocalDataSource.getAsignaturas(new LoadAsignaturasCallback() {
             @Override
             public void onAsignaturasLoaded(List<Asignatura> asignaturas) {
                 refreshCache(asignaturas);
@@ -70,9 +70,38 @@ public class AsignaturasRepository implements AsignaturasDataSource {
     }
 
     @Override
+    public void getAsignaturas(@NonNull String periodoId, @NonNull final LoadAsignaturasCallback callback) {
+        checkNotNull(periodoId);
+        checkNotNull(callback);
+
+        List<Asignatura> asignaturasPeriodo = new ArrayList<>();
+
+        if (mCachedAsignaturas != null && !mCacheIsDirty) {
+            Iterator<Map.Entry<String, Asignatura>> iterator = mCachedAsignaturas.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Asignatura> entry = iterator.next();
+                Asignatura asignatura = entry.getValue();
+                if (asignatura.getPeriodoId().equals(periodoId)) {
+                    asignaturasPeriodo.add(asignatura);
+                }
+            }
+
+            if (asignaturasPeriodo.isEmpty()) {
+                callback.onDataNotAvailable();
+            } else {
+                callback.onAsignaturasLoaded(asignaturasPeriodo);
+            }
+            return;
+        }
+
+        mAsignaturasLocalDataSource.getAsignaturas(periodoId, callback);
+    }
+
+    @Override
     public void getAsignatura(@NonNull String asignaturaId, @NonNull NotasDataSource notasDataSource,
                               @NonNull LoadAsignaturaCallback callback) {
         checkNotNull(asignaturaId);
+        checkNotNull(notasDataSource);
         checkNotNull(callback);
 
         Asignatura cachedAsignatura = getAsignaturaWithId(asignaturaId);

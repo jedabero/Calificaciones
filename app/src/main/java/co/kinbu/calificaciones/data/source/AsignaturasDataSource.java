@@ -22,8 +22,9 @@ public interface AsignaturasDataSource {
         void onDataNotAvailable();
     }
 
-    void getAsignaturas(@NonNull NotasDataSource notasDataSource,
-                        @NonNull LoadAsignaturasCallback callback);
+    void getAsignaturas(@NonNull LoadAsignaturasCallback callback);
+
+    void getAsignaturas(@NonNull String periodoId, @NonNull LoadAsignaturasCallback callback);
 
     void getAsignatura(@NonNull String asignaturaId, @NonNull NotasDataSource notasDataSource,
                        @NonNull LoadAsignaturaCallback callback);

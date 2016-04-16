@@ -40,7 +40,43 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
     }
 
     @Override
-    public void getAsignaturas(@NonNull NotasDataSource notasDataSource, @NonNull LoadAsignaturasCallback callback) {
+    public void getAsignaturas(@NonNull LoadAsignaturasCallback callback) {
+        List<Asignatura> asignaturas = new ArrayList<>();
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String[] projection = {
+                AsignaturaEntry.COLUMN_NAME_ID,
+                AsignaturaEntry.COLUMN_NAME_PERIODO_ID,
+                AsignaturaEntry.COLUMN_NAME_NOMBRE,
+                AsignaturaEntry.COLUMN_NAME_DEFINITIVA
+        };
+
+        Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, null, null, null, null, null);
+        if (c != null && c.getCount() > 0) {
+            while (c.moveToNext()) {
+                String id = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_ID));
+                String periodoId = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_PERIODO_ID));
+                String nombre = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_NOMBRE));
+                Double definitiva = c.getDouble(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_DEFINITIVA));
+
+                Asignatura asignatura = new Asignatura(id, periodoId, nombre, definitiva);
+                asignaturas.add(asignatura);
+            }
+        }
+        if (c != null) {
+            c.close();
+        }
+        db.close();
+
+        if (asignaturas.isEmpty()) {
+            callback.onDataNotAvailable();
+        } else {
+            callback.onAsignaturasLoaded(asignaturas);
+        }
+    }
+
+    @Override
+    public void getAsignaturas(@NonNull String periodoId, @NonNull LoadAsignaturasCallback callback) {
         List<Asignatura> asignaturas = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -50,25 +86,17 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
                 AsignaturaEntry.COLUMN_NAME_DEFINITIVA
         };
 
-        Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, null, null, null, null, null);
+        String selection = AsignaturaEntry.COLUMN_NAME_PERIODO_ID + "LIKE ?";
+        String[] selectionArgs = { periodoId };
+
+        Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
         if (c != null && c.getCount() > 0) {
             while (c.moveToNext()) {
                 String id = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_ID));
                 String nombre = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_NOMBRE));
                 Double definitiva = c.getDouble(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_DEFINITIVA));
 
-                final Asignatura asignatura = new Asignatura(id, nombre, definitiva);
-                notasDataSource.getNotas(id, new NotasDataSource.LoadNotasCallback() {
-                    @Override
-                    public void onNotasLoaded(List<Nota> notas) {
-                        asignatura.getNotas().addAll(notas);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable() {
-
-                    }
-                });
+                Asignatura asignatura = new Asignatura(id, periodoId, nombre, definitiva);
                 asignaturas.add(asignatura);
             }
         }
@@ -90,6 +118,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
+                AsignaturaEntry.COLUMN_NAME_PERIODO_ID,
                 AsignaturaEntry.COLUMN_NAME_NOMBRE,
                 AsignaturaEntry.COLUMN_NAME_DEFINITIVA
         };
@@ -102,10 +131,11 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
         final Asignatura asignatura;
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
+            String periodoId = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_PERIODO_ID));
             String nombre = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_NOMBRE));
             Double definitiva = c.getDouble(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_DEFINITIVA));
 
-            asignatura = new Asignatura(asignaturaId, nombre, definitiva);
+            asignatura = new Asignatura(asignaturaId, periodoId, nombre, definitiva);
             notasDataSource.getNotas(asignaturaId, new NotasDataSource.LoadNotasCallback() {
                 @Override
                 public void onNotasLoaded(List<Nota> notas) {
@@ -113,9 +143,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
                 }
 
                 @Override
-                public void onDataNotAvailable() {
-
-                }
+                public void onDataNotAvailable() {}
             });
         } else {
             asignatura = null;
@@ -139,6 +167,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
 
         ContentValues values = new ContentValues();
         values.put(AsignaturaEntry.COLUMN_NAME_ID, asignatura.getId());
+        values.put(AsignaturaEntry.COLUMN_NAME_PERIODO_ID, asignatura.getPeriodoId());
         values.put(AsignaturaEntry.COLUMN_NAME_NOMBRE, asignatura.getNombre());
         values.put(AsignaturaEntry.COLUMN_NAME_DEFINITIVA, asignatura.getDefinitiva());
 
@@ -153,6 +182,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(AsignaturaEntry.COLUMN_NAME_PERIODO_ID, asignatura.getPeriodoId());
         values.put(AsignaturaEntry.COLUMN_NAME_NOMBRE, asignatura.getNombre());
         values.put(AsignaturaEntry.COLUMN_NAME_DEFINITIVA, asignatura.getDefinitiva());
 

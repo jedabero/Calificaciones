@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements
                 AsignaturasLocalDataSource.getINSTANCE(getApplicationContext()));
         mAsignaturasRepository.refreshAsignaturas();
         mNotasRepository= NotasRepository.getInstance(
-                NotasLocalDataSource.getINSTANCE(getApplicationContext()));
+                NotasLocalDataSource.getInstance(getApplicationContext()));
         mNotasRepository.refreshNotas();
 
         mFragmentManager = getSupportFragmentManager();
