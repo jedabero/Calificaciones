@@ -27,7 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String COMMA = ",";
 
     private static final String SQL_CREATE_PERIODOS =
-            "CREATE TABLE " + AsignaturaEntry.TABLE_NAME + " (" +
+            "CREATE TABLE " + PeriodoEntry.TABLE_NAME + " (" +
                     PeriodoEntry.COLUMN_NAME_ID + TEXT + PRIMARY_KEY + COMMA +
                     PeriodoEntry.COLUMN_NAME_NOMBRE + TEXT + COMMA +
                     PeriodoEntry.COLUMN_NAME_PROMEDIO + REAL +

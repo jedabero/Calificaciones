@@ -12,24 +12,27 @@ import co.kinbu.calificaciones.data.Asignatura;
 import co.kinbu.calificaciones.data.AsignaturasManager;
 import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.data.NotasManager;
+import co.kinbu.calificaciones.data.Periodo;
 import co.kinbu.calificaciones.data.source.AsignaturasDataSource;
 import co.kinbu.calificaciones.data.source.AsignaturasRepository;
 import co.kinbu.calificaciones.data.source.NotasRepository;
+import co.kinbu.calificaciones.data.source.PeriodosDataSource;
+import co.kinbu.calificaciones.data.source.PeriodosRepository;
 import co.kinbu.calificaciones.data.source.local.AsignaturasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.NotasLocalDataSource;
+import co.kinbu.calificaciones.data.source.local.PeriodosLocalDataSource;
 import co.kinbu.calificaciones.view.AsignaturaFragment;
+import co.kinbu.calificaciones.view.PeriodoFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        AsignaturaFragment.OnFragmentInteractionListener {
+        PeriodoFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
-    private AsignaturasRepository mAsignaturasRepository;
-    private NotasRepository mNotasRepository;
+    private PeriodosRepository mPeriodosRepository;
     private FragmentManager mFragmentManager;
 
-    private AsignaturaFragment asignaturaFragment;
-    private Asignatura asignatura;
+    private List<Periodo> periodos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +40,25 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         initInstances();
 
-        mAsignaturasRepository.getAsignaturas(mNotasRepository, new AsignaturasDataSource.LoadAsignaturasCallback() {
+        mPeriodosRepository.getPeriodos(new PeriodosDataSource.LoadPeriodosCallback() {
             @Override
-            public void onAsignaturasLoaded(List<Asignatura> asignaturas) {
-                asignatura = asignaturas.get(0);
+            public void onPeriodosLoaded(List<Periodo> periodosLista) {
+                periodos = periodosLista;
             }
 
             @Override
             public void onDataNotAvailable() {
-                asignatura = new Asignatura();
+                periodos = new ArrayList<>();
+                Periodo periodo = new Periodo();
+                List <Asignatura> asignaturas = new ArrayList<>();
+                Asignatura asignatura = new Asignatura(periodo.getId());
                 List<Nota> notas = new ArrayList<>();
+                AsignaturasRepository mAsignaturasRepository = AsignaturasRepository.getInstance(
+                        AsignaturasLocalDataSource.getINSTANCE(getApplicationContext()));
+                mAsignaturasRepository.refreshAsignaturas();
+                NotasRepository mNotasRepository= NotasRepository.getInstance(
+                        NotasLocalDataSource.getInstance(getApplicationContext()));
+                mNotasRepository.refreshNotas();
                 for (int i = 0; i < 3; ++i) {
                     Nota nota = new Nota(asignatura.getId());
                     notas.add(nota);
@@ -55,28 +67,36 @@ public class MainActivity extends AppCompatActivity implements
                 asignatura.getNotas().addAll(notas);
                 AsignaturasManager.actualizarDefinitiva(asignatura);
                 mAsignaturasRepository.saveAsignatura(asignatura);
+                asignaturas.add(asignatura);
+                periodo.getAsignaturas().addAll(asignaturas);
+                periodo.setPromedio(asignatura.getDefinitiva());
+                mPeriodosRepository.savePeriodo(periodo);
+                periodos.add(periodo);
             }
         });
 
         mFragmentManager.popBackStack();
 
-        asignaturaFragment = AsignaturaFragment.newInstance();
-        asignaturaFragment.setArguments(getIntent().getExtras());
+        PeriodoFragment periodoFragment = PeriodoFragment.newInstance();
+        periodoFragment.setArguments(getIntent().getExtras());
 
-        String backstack = asignaturaFragment.getClass().getName();
-        mFragmentManager.beginTransaction().add(R.id.fragment_container, asignaturaFragment, backstack)
+        String backstack = periodoFragment.getClass().getName();
+        mFragmentManager.beginTransaction().add(R.id.fragment_container, periodoFragment, backstack)
                 .addToBackStack(backstack).commit();
-
-        asignaturaFragment.setAsignatura(asignatura);
     }
 
     private void initInstances() {
+        mPeriodosRepository = PeriodosRepository.getInstance(
+                PeriodosLocalDataSource.getINSTANCE(getApplicationContext()));
+        mPeriodosRepository.refreshPeriodos();
+        /*
         mAsignaturasRepository = AsignaturasRepository.getInstance(
                 AsignaturasLocalDataSource.getINSTANCE(getApplicationContext()));
         mAsignaturasRepository.refreshAsignaturas();
         mNotasRepository= NotasRepository.getInstance(
                 NotasLocalDataSource.getInstance(getApplicationContext()));
         mNotasRepository.refreshNotas();
+        */
 
         mFragmentManager = getSupportFragmentManager();
     }
@@ -88,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements
         AsignaturasRepository.destroyInstance();
     }
 
+    @Override
+    public void onFragmentInteraction() {
+
+    }
+/*
     @Override
     public void onFragmentInteraction(Nota nota) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
@@ -139,5 +164,5 @@ public class MainActivity extends AppCompatActivity implements
         mAsignaturasRepository.updateAsignatura(asignatura);
         asignaturaFragment.updatePromedio();
     }
-
+*/
 }

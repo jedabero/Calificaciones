@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import co.kinbu.calificaciones.NotaRecyclerViewAdapter;
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.Asignatura;
@@ -69,7 +71,7 @@ public class AsignaturaFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }/**/
         setHasOptionsMenu(true);
-        if (mAsignatura == null) mAsignatura = new Asignatura();
+        //if (mAsignatura == null) mAsignatura = new Asignatura();
     }
 
     @Override
@@ -150,7 +152,7 @@ public class AsignaturaFragment extends Fragment {
     }
 
     public void updatePromedio() {
-        String p = String.format("%,.2f" , mAsignatura.getDefinitiva());
+        String p = String.format(Locale.getDefault(), "%,.2f" , mAsignatura.getDefinitiva());
         mPromedioView.setText(p);
     }
 

@@ -32,7 +32,7 @@ public class PeriodosLocalDataSource implements PeriodosDataSource {
         mDbHelper = new DbHelper(context);
     }
 
-    public static PeriodosLocalDataSource getInstance(@NonNull Context context) {
+    public static PeriodosLocalDataSource getINSTANCE(@NonNull Context context) {
         checkNotNull(context);
         if (INSTANCE == null) {
             INSTANCE = new PeriodosLocalDataSource(context);
