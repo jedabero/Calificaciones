@@ -3,17 +3,14 @@ package co.kinbu.calificaciones;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.kinbu.calificaciones.data.Asignatura;
-import co.kinbu.calificaciones.data.AsignaturasManager;
+import co.kinbu.calificaciones.util.AsignaturasManager;
 import co.kinbu.calificaciones.data.Nota;
-import co.kinbu.calificaciones.data.NotasManager;
 import co.kinbu.calificaciones.data.Periodo;
-import co.kinbu.calificaciones.data.source.AsignaturasDataSource;
 import co.kinbu.calificaciones.data.source.AsignaturasRepository;
 import co.kinbu.calificaciones.data.source.NotasRepository;
 import co.kinbu.calificaciones.data.source.PeriodosDataSource;
@@ -21,7 +18,6 @@ import co.kinbu.calificaciones.data.source.PeriodosRepository;
 import co.kinbu.calificaciones.data.source.local.AsignaturasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.NotasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.PeriodosLocalDataSource;
-import co.kinbu.calificaciones.view.AsignaturaFragment;
 import co.kinbu.calificaciones.view.PeriodoFragment;
 
 public class MainActivity extends AppCompatActivity implements
@@ -115,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements
 /*
     @Override
     public void onFragmentInteraction(Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ NotasManager.toString(nota));
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ nota);
     }
 
     @Override
@@ -136,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDeleteNota(Nota nota) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: " + NotasManager.toString(nota));
+        if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: " + nota);
         if (nota == null) return;
         mNotasRepository.deleteNota(nota.getId());
         asignatura.getNotas().remove(asignatura.getNotas().indexOf(nota));

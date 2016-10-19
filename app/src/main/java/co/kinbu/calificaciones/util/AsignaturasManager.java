@@ -1,4 +1,7 @@
-package co.kinbu.calificaciones.data;
+package co.kinbu.calificaciones.util;
+
+import co.kinbu.calificaciones.data.Asignatura;
+import co.kinbu.calificaciones.data.Nota;
 
 /**
  * AsignaturasManager
