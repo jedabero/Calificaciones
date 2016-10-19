@@ -1,5 +1,10 @@
 package co.kinbu.calificaciones.data;
 
+import com.google.common.base.Objects;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.UUID;
 
 /**
@@ -9,19 +14,40 @@ import java.util.UUID;
 public class Nota {
 
     private String id;
+    @SerializedName("asignatura_id")
     private String asignaturaId;
 
     private double valor;
     private int peso;
 
+    /**
+     * Instantiates a new Nota.
+     *
+     * @param asignaturaId the asignatura id
+     */
     public Nota(String asignaturaId) {
         this(asignaturaId, 0d, 1);
     }
 
+    /**
+     * Instantiates a new Nota.
+     *
+     * @param asignaturaId the asignatura id
+     * @param valor        the valor
+     * @param peso         the peso
+     */
     public Nota(String asignaturaId, double valor, int peso) {
         this(UUID.randomUUID().toString(), asignaturaId, valor, peso);
     }
 
+    /**
+     * Instantiates a new Nota.
+     *
+     * @param uuid         the uuid
+     * @param asignaturaId the asignatura id
+     * @param valor        the valor
+     * @param peso         the peso
+     */
     public Nota(String uuid, String asignaturaId, double valor, int peso) {
         this.id = uuid;
         this.asignaturaId = asignaturaId;
@@ -52,6 +78,29 @@ public class Nota {
 
     public void setPeso(int peso) {
         this.peso = peso;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != getClass()) return false;
+
+        Nota nota = (Nota) obj;
+        return Objects.equal(nota.id, id) &&
+                Objects.equal(nota.asignaturaId, asignaturaId) &&
+                Objects.equal(nota.valor, valor) &&
+                Objects.equal(nota.peso, peso);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, asignaturaId, valor, peso);
+    }
+
+    @Override
+    public String toString() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.serializeNulls().create();
+        return gson.toJson(this);
     }
 
 }
