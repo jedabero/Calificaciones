@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,8 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
     }
 
     @Override
-    public void getAsignaturas(@NonNull LoadAsignaturasCallback callback) {
+    public void getAsignaturas(@NonNull LoadAsignaturasCallback callback, @Nullable String selection,
+                               @Nullable String[] selectionArgs) {
         List<Asignatura> asignaturas = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -51,7 +53,7 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
                 AsignaturaEntry.COLUMN_NAME_DEFINITIVA
         };
 
-        Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, null, null, null, null, null);
+        Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
         if (c != null && c.getCount() > 0) {
             while (c.moveToNext()) {
                 String id = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_ID));
@@ -77,39 +79,9 @@ public class AsignaturasLocalDataSource implements AsignaturasDataSource {
 
     @Override
     public void getAsignaturas(@NonNull String periodoId, @NonNull LoadAsignaturasCallback callback) {
-        List<Asignatura> asignaturas = new ArrayList<>();
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        String[] projection = {
-                AsignaturaEntry.COLUMN_NAME_ID,
-                AsignaturaEntry.COLUMN_NAME_NOMBRE,
-                AsignaturaEntry.COLUMN_NAME_DEFINITIVA
-        };
-
         String selection = AsignaturaEntry.COLUMN_NAME_PERIODO_ID + "LIKE ?";
         String[] selectionArgs = { periodoId };
-
-        Cursor c = db.query(AsignaturaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
-        if (c != null && c.getCount() > 0) {
-            while (c.moveToNext()) {
-                String id = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_ID));
-                String nombre = c.getString(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_NOMBRE));
-                Double definitiva = c.getDouble(c.getColumnIndex(AsignaturaEntry.COLUMN_NAME_DEFINITIVA));
-
-                Asignatura asignatura = new Asignatura(id, periodoId, nombre, definitiva);
-                asignaturas.add(asignatura);
-            }
-        }
-        if (c != null) {
-            c.close();
-        }
-        db.close();
-
-        if (asignaturas.isEmpty()) {
-            callback.onDataNotAvailable();
-        } else {
-            callback.onAsignaturasLoaded(asignaturas);
-        }
+        getAsignaturas(callback, selection, selectionArgs);
     }
 
     @Override

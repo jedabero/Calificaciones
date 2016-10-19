@@ -1,6 +1,7 @@
 package co.kinbu.calificaciones.data.source;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -22,7 +23,8 @@ public interface AsignaturasDataSource {
         void onDataNotAvailable();
     }
 
-    void getAsignaturas(@NonNull LoadAsignaturasCallback callback);
+    void getAsignaturas(@NonNull LoadAsignaturasCallback callback, @Nullable String selection,
+                        @Nullable String[] selectionArgs);
 
     void getAsignaturas(@NonNull String periodoId, @NonNull LoadAsignaturasCallback callback);
 

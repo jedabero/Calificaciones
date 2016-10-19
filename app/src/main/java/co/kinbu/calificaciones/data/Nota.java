@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
+import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
+
 import java.util.UUID;
 
 /**
@@ -14,7 +16,7 @@ import java.util.UUID;
 public class Nota {
 
     private String id;
-    @SerializedName("asignatura_id")
+    @SerializedName(NotaEntry.COLUMN_NAME_ASIGNATURA_ID)
     private String asignaturaId;
 
     private double valor;

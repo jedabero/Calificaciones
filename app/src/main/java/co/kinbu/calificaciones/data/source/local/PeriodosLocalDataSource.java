@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class PeriodosLocalDataSource implements PeriodosDataSource {
 
-    public static PeriodosLocalDataSource INSTANCE;
+    private static PeriodosLocalDataSource INSTANCE;
 
     private DbHelper mDbHelper;
 

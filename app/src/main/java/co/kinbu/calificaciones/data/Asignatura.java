@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import co.kinbu.calificaciones.data.source.local.PersistenceContract.AsignaturaEntry;
+
 /**
  * Asignatura
  * Created by jedabero on 6/03/16.
@@ -16,7 +18,7 @@ import java.util.UUID;
 public class Asignatura {
 
     private String id;
-    @SerializedName("periodo_id")
+    @SerializedName(AsignaturaEntry.COLUMN_NAME_PERIODO_ID)
     private String periodoId;
 
     private String nombre;

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class NotasLocalDataSource implements NotasDataSource {
 
-    public static NotasLocalDataSource INSTANCE;
+    private static NotasLocalDataSource INSTANCE;
 
     private DbHelper mDbHelper;
 
@@ -38,7 +39,8 @@ public class NotasLocalDataSource implements NotasDataSource {
     }
 
     @Override
-    public void getNotas(@NonNull LoadNotasCallback callback) {
+    public void getNotas(@NonNull LoadNotasCallback callback, @Nullable String selection,
+                         @Nullable String[] selectionArgs) {
         List<Nota> notas = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -49,7 +51,7 @@ public class NotasLocalDataSource implements NotasDataSource {
                 NotaEntry.COLUMN_NAME_PESO
         };
 
-        Cursor c = db.query(NotaEntry.TABLE_NAME, projection, null, null, null, null, null);
+        Cursor c = db.query(NotaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
         if (c != null && c.getCount() > 0) {
             while (c.moveToNext()) {
                 String id = c.getString(c.getColumnIndex(NotaEntry.COLUMN_NAME_ID));
@@ -75,39 +77,9 @@ public class NotasLocalDataSource implements NotasDataSource {
 
     @Override
     public void getNotas(@NonNull String asignaturaId, @NonNull LoadNotasCallback callback) {
-        List<Nota> notas = new ArrayList<>();
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        String[] projection = {
-                NotaEntry.COLUMN_NAME_ID,
-                NotaEntry.COLUMN_NAME_VALOR,
-                NotaEntry.COLUMN_NAME_PESO
-        };
-
         String selection = NotaEntry.COLUMN_NAME_ASIGNATURA_ID + " LIKE ?";
         String[] selectionArgs = { asignaturaId };
-
-        Cursor c = db.query(NotaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
-        if (c != null && c.getCount() > 0) {
-            while (c.moveToNext()) {
-                String id = c.getString(c.getColumnIndex(NotaEntry.COLUMN_NAME_ID));
-                Double valor = c.getDouble(c.getColumnIndex(NotaEntry.COLUMN_NAME_VALOR));
-                Integer peso = c.getInt(c.getColumnIndex(NotaEntry.COLUMN_NAME_PESO));
-
-                Nota nota = new Nota(id, asignaturaId, valor, peso);
-                notas.add(nota);
-            }
-        }
-        if (c != null) {
-            c.close();
-        }
-        db.close();
-
-        if (notas.isEmpty()) {
-            callback.onDataNotAvailable();
-        } else {
-            callback.onNotasLoaded(notas);
-        }
+        getNotas(callback, selection, selectionArgs);
     }
 
     @Override
