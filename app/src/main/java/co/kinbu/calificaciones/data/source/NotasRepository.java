@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,8 @@ public class NotasRepository implements NotasDataSource {
     }
 
     @Override
-    public void getNotas(@NonNull final LoadNotasCallback callback) {
+    public void getNotas(@NonNull final LoadNotasCallback callback, @Nullable String selection,
+                         @Nullable String[] selectionArgs) {
         checkNotNull(callback);
 
         if (mCachedNotas != null && !mCacheIsDirty) {
@@ -67,7 +67,7 @@ public class NotasRepository implements NotasDataSource {
             public void onDataNotAvailable() {
                 callback.onDataNotAvailable();
             }
-        });
+        }, selection, selectionArgs);
     }
 
     @Override
@@ -78,9 +78,7 @@ public class NotasRepository implements NotasDataSource {
         List<Nota> notasAsignatura = new ArrayList<>();
 
         if (mCachedNotas != null && !mCacheIsDirty) {
-            Iterator<Map.Entry<String, Nota>> iterator = mCachedNotas.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Nota> entry = iterator.next();
+            for (Map.Entry<String, Nota> entry : mCachedNotas.entrySet()) {
                 Nota nota = entry.getValue();
                 if (nota.getAsignaturaId().equals(asignaturaId)) {
                     notasAsignatura.add(nota);

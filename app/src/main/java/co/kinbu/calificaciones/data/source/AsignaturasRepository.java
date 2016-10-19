@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,8 @@ public class AsignaturasRepository implements AsignaturasDataSource {
 
 
     @Override
-    public void getAsignaturas(@NonNull final LoadAsignaturasCallback callback) {
+    public void getAsignaturas(@NonNull final LoadAsignaturasCallback callback, @Nullable String selection,
+                               @Nullable String[] selectionArgs) {
         checkNotNull(callback);
         if (mCachedAsignaturas != null && !mCacheIsDirty) {
             callback.onAsignaturasLoaded(new ArrayList<>(mCachedAsignaturas.values()));
@@ -66,7 +66,7 @@ public class AsignaturasRepository implements AsignaturasDataSource {
             public void onDataNotAvailable() {
                 callback.onDataNotAvailable();
             }
-        });
+        }, selection, selectionArgs);
     }
 
     @Override
@@ -77,9 +77,7 @@ public class AsignaturasRepository implements AsignaturasDataSource {
         List<Asignatura> asignaturasPeriodo = new ArrayList<>();
 
         if (mCachedAsignaturas != null && !mCacheIsDirty) {
-            Iterator<Map.Entry<String, Asignatura>> iterator = mCachedAsignaturas.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Asignatura> entry = iterator.next();
+            for (Map.Entry<String, Asignatura> entry : mCachedAsignaturas.entrySet()) {
                 Asignatura asignatura = entry.getValue();
                 if (asignatura.getPeriodoId().equals(periodoId)) {
                     asignaturasPeriodo.add(asignatura);
