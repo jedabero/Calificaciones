@@ -11,4 +11,9 @@
 
     <string name="opcion_agregar_asignatura">Agregar asignatura</string>
 
+    <string name="loading_periodos_error">Ocurrio un error al cargar los periodos</string>
+    <string name="no_periodos">Periodo guardado</string>
+    <string name="successfully_saved_periodo">Periodo guardado</string>
+    <string name="refresh">Actualizar</string>
+
 </resources>
