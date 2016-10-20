@@ -31,6 +31,8 @@ interface PeriodosContract {
 
         void showSuccessfullySavedMessage();
 
+        boolean isActive();
+
     }
 
     interface Presenter extends BasePresenter {
