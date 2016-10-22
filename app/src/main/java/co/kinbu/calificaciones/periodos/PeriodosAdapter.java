@@ -86,7 +86,7 @@ public final class PeriodosAdapter extends RecyclerView.Adapter<PeriodosAdapter.
         void setPeriodo(Periodo periodo) {
             this.periodo = periodo;
             nombreText.setText(periodo.getNombre());
-            promedioText.setText(String.format(Locale.getDefault(), "%f", periodo.getPromedio()));
+            promedioText.setText(String.format(Locale.getDefault(), "%.2f", periodo.getPromedio()));
         }
     }
 }

@@ -65,7 +65,7 @@ public final class PeriodosPresenter implements PeriodosContract.Presenter {
                     return;
                 }
                 if (showLoadingUI) {
-                    mPeriodosView.setLoadingIndicator(true);
+                    mPeriodosView.setLoadingIndicator(false);
                 }
                 processPeriodos(periodos);
             }

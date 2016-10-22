@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,7 +89,8 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
         View root = inflater.inflate(R.layout.periodos_fragment, container, false);
 
         mPeriodosView = (RecyclerView) root.findViewById(R.id.list_periodos);
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mPeriodosView.setLayoutManager(layoutManager);
         mPeriodosView.setAdapter(mPeriodosAdapter);
 
         mNoPeriodosView = root.findViewById(R.id.no_periodos);

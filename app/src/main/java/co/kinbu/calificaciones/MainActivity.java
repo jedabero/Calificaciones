@@ -1,7 +1,6 @@
 package co.kinbu.calificaciones;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import co.kinbu.calificaciones.data.source.local.AsignaturasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.NotasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.PeriodosLocalDataSource;
 import co.kinbu.calificaciones.util.ViewUtils;
-import co.kinbu.calificaciones.view.PeriodoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,16 +34,28 @@ public class MainActivity extends AppCompatActivity {
         initInstances();
 
 
+        PeriodosFragment fragment =
+                (PeriodosFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment == null) {
+            fragment = PeriodosFragment.newInstance();
+            ViewUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
+        }
+
+        final PeriodosRepository mPeriodosRepository = PeriodosRepository.getInstance(
+                PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        mPeriodosPresenter = new PeriodosPresenter(mPeriodosRepository, fragment);
+
         /*
         mPeriodosRepository.getPeriodos(new PeriodosDataSource.LoadPeriodosCallback() {
             @Override
             public void onPeriodosLoaded(List<Periodo> periodosLista) {
-                periodos = periodosLista;
+
             }
 
             @Override
             public void onDataNotAvailable() {
-                periodos = new ArrayList<>();
                 Periodo periodo = new Periodo();
                 List <Asignatura> asignaturas = new ArrayList<>();
                 Asignatura asignatura = new Asignatura(periodo.getId());
@@ -68,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 periodo.getAsignaturas().addAll(asignaturas);
                 periodo.setPromedio(asignatura.getDefinitiva());
                 mPeriodosRepository.savePeriodo(periodo);
-                periodos.add(periodo);
+
             }
         });
         */
@@ -88,19 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initInstances() {
-        PeriodosFragment fragment =
-                (PeriodosFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            fragment = PeriodosFragment.newInstance();
-            ViewUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
-        }
 
-        mPeriodosPresenter = new PeriodosPresenter(
-                PeriodosRepository.getInstance(
-                        PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
-                ),
-                fragment
-        );
 
         /*
         mAsignaturasRepository = AsignaturasRepository.getInstance(
@@ -116,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AsignaturasRepository.destroyInstance();
     }
 
 /*
