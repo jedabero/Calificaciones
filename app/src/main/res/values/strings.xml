@@ -15,5 +15,6 @@
     <string name="no_periodos">Periodo guardado</string>
     <string name="successfully_saved_periodo">Periodo guardado</string>
     <string name="refresh">Actualizar</string>
+    <string name="add">Agregar</string>
 
 </resources>

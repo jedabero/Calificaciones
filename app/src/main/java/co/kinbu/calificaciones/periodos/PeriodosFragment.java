@@ -127,6 +127,9 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
             case R.id.menu_refresh:
                 mPeriodosPresenter.loadPeriodos(true);
                 break;
+            case R.id.menu_add:
+                mPeriodosPresenter.addNewPeriodo();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
