@@ -23,4 +23,21 @@ public class ViewUtils {
         transaction.commit();
     }
 
+    public static void replaceFragmentOnActivity(@NonNull FragmentManager fragmentManager,
+                                                 @NonNull Fragment fragment, int frameId) {
+        checkNotNull(fragmentManager);
+        checkNotNull(fragment);
+
+        String fragmentClass = fragment.getClass().getName();
+
+        boolean fragmentPopped = fragmentManager.popBackStackImmediate(fragmentClass, 0);
+        if (!fragmentPopped && fragmentManager.findFragmentByTag(fragmentClass) == null) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(frameId, fragment, fragmentClass);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            transaction.addToBackStack(fragmentClass);
+            transaction.commit();
+        }
+    }
+
 }
