@@ -52,6 +52,8 @@ public final class AddEditPeriodoPresenter implements AddEditPeriodoContract.Pre
     public void start() {
         if (!isNewPeriodo()) {
             populatePeriodo();
+        } else {
+            mAddEditPeriodoView.setNombre("");
         }
     }
 
@@ -107,6 +109,7 @@ public final class AddEditPeriodoPresenter implements AddEditPeriodoContract.Pre
             throw new RuntimeException("createPeriodo() should only be called when editing.");
         }
         mPeriodosDataSource.savePeriodo(new Periodo(mPeriodoId, nombre, mPeriodoPromedio));
+        mAddEditPeriodoView.showPeriodos();
     }
 
 }

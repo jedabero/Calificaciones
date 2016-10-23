@@ -1,7 +1,6 @@
 package co.kinbu.calificaciones.periodos;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +37,8 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
 
     private static final String TAG = "PeriodosFragment";
 
+    private static final String SHOW_SUCCESSFULLY_SAVED_MESSAGE = "SHOW_SUCCESSFULLY_SAVED_MESSAGE";
+
     private OnPeriodosFragmentInteractionListener mListener;
 
     private PeriodosContract.Presenter mPeriodosPresenter;
@@ -49,6 +50,8 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
     private TextView mNoPeriodosText;
     private Button mAddPeriodo;
 
+    private boolean showSuccessfullySavedMessage;
+
     public PeriodosFragment() { }
 
     /**
@@ -57,15 +60,20 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
      *
      * @return A new instance of fragment PeriodosFragment.
      */
-    public static PeriodosFragment newInstance() {
-        return new PeriodosFragment();
+    public static PeriodosFragment newInstance(boolean showSuccessfullySavedMessage) {
+        Bundle args = new Bundle();
+        args.putBoolean(SHOW_SUCCESSFULLY_SAVED_MESSAGE, showSuccessfullySavedMessage);
+        PeriodosFragment fragment = new PeriodosFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            Log.d(TAG, "onCreate: " + getArguments());
+        Bundle args = getArguments();
+        if (args != null) {
+            showSuccessfullySavedMessage = args.getBoolean(SHOW_SUCCESSFULLY_SAVED_MESSAGE, false);
         }
         mPeriodosAdapter = new PeriodosAdapter(new ArrayList<Periodo>(0), mItemListener);
     }
@@ -74,16 +82,14 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
     public void onResume() {
         super.onResume();
         mPeriodosPresenter.start();
+        if (showSuccessfullySavedMessage) {
+            showSuccessfullySavedMessage();
+        }
     }
 
     @Override
     public void setPresenter(@NonNull PeriodosContract.Presenter presenter) {
         mPeriodosPresenter = checkNotNull(presenter);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPeriodosPresenter.result(requestCode, resultCode);
     }
 
     @Nullable

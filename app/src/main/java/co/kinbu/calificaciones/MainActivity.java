@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements
         PeriodosFragment fragment =
                 (PeriodosFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment == null) {
-            fragment = PeriodosFragment.newInstance();
+            fragment = PeriodosFragment.newInstance(false);
             ViewUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
         }
 
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onShowPeriodos() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment == null || !(fragment instanceof PeriodosFragment)) {
-            fragment = PeriodosFragment.newInstance();
+            fragment = PeriodosFragment.newInstance(true);
         }
         ViewUtils.replaceFragmentOnActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
         final PeriodosRepository mPeriodosRepository = PeriodosRepository.getInstance(

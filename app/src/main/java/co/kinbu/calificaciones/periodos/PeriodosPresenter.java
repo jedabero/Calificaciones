@@ -38,13 +38,6 @@ public final class PeriodosPresenter implements PeriodosContract.Presenter {
     }
 
     @Override
-    public void result(int requestCode, int resultCode) {
-        if (/* REQUEST_ADD_PERIODO && */ Activity.RESULT_OK == resultCode) {
-            mPeriodosView.showSuccessfullySavedMessage();
-        }
-    }
-
-    @Override
     public void loadPeriodos(boolean fordeUpdate) {
         loadPeriodos(fordeUpdate || mFirstLoad, true);
         mFirstLoad = false;
