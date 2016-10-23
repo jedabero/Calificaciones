@@ -5,9 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
-
 import java.util.UUID;
+
+import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
 
 /**
  * Nota

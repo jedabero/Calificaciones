@@ -1,7 +1,6 @@
 package co.kinbu.calificaciones.view;
 
 import android.content.Context;
-
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;

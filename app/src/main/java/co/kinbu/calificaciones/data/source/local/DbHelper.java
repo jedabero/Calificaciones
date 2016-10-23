@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import co.kinbu.calificaciones.data.source.local.PersistenceContract.PeriodoEntry;
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.AsignaturaEntry;
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
+import co.kinbu.calificaciones.data.source.local.PersistenceContract.PeriodoEntry;
 
 /**
  * DbHelper
