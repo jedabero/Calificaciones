@@ -1,6 +1,7 @@
 package co.kinbu.calificaciones;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.List;
 import co.kinbu.calificaciones.data.Asignatura;
 import co.kinbu.calificaciones.periodos.PeriodosFragment;
 import co.kinbu.calificaciones.periodos.PeriodosPresenter;
+import co.kinbu.calificaciones.periodos.addedit.AddEditPeriodoFragment;
+import co.kinbu.calificaciones.periodos.addedit.AddEditPeriodoPresenter;
 import co.kinbu.calificaciones.util.AsignaturasManager;
 import co.kinbu.calificaciones.data.Nota;
 import co.kinbu.calificaciones.data.Periodo;
@@ -21,7 +24,9 @@ import co.kinbu.calificaciones.data.source.local.NotasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.PeriodosLocalDataSource;
 import co.kinbu.calificaciones.util.ViewUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        PeriodosFragment.OnPeriodosFragmentInteractionListener,
+        AddEditPeriodoFragment.OnAddEditPeriodoFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
@@ -116,7 +121,37 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-/*
+    @Override
+    public void onShowAddPeriodo() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment == null || !(fragment instanceof AddEditPeriodoFragment)) {
+            fragment = AddEditPeriodoFragment.newInstance();
+        }
+        ViewUtils.replaceFragmentOnActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
+
+        final PeriodosRepository mPeriodosRepository = PeriodosRepository.getInstance(
+                PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        final AsignaturasRepository asignaturasRepository = AsignaturasRepository.getInstance(
+                AsignaturasLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        new AddEditPeriodoPresenter(null, mPeriodosRepository,
+                asignaturasRepository, (AddEditPeriodoFragment) fragment);
+    }
+
+    @Override
+    public void onShowPeriodoDetailsUi(String periodoId) {
+        // TODO
+    }
+
+    @Override
+    public void onShowPeriodos() {
+        // TODO
+    }
+
+    /*
     @Override
     public void onFragmentInteraction(Nota nota) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onFragmentInteraction: "+ nota);

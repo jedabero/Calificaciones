@@ -16,5 +16,8 @@
     <string name="successfully_saved_periodo">Periodo guardado</string>
     <string name="refresh">Actualizar</string>
     <string name="add">Agregar</string>
+    <string name="save">Guardar</string>
+
+    <string name="empty_periodo_message">Debe darle un nombre al periodo</string>
 
 </resources>

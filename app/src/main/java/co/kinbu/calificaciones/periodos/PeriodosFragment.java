@@ -1,5 +1,6 @@
 package co.kinbu.calificaciones.periodos;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,6 +37,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class PeriodosFragment extends Fragment implements PeriodosContract.View {
 
     private static final String TAG = "PeriodosFragment";
+
+    private OnPeriodosFragmentInteractionListener mListener;
+
     private PeriodosContract.Presenter mPeriodosPresenter;
 
     private PeriodosAdapter mPeriodosAdapter;
@@ -122,6 +126,22 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnPeriodosFragmentInteractionListener) {
+            mListener = (OnPeriodosFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnPeriodosFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
@@ -164,12 +184,12 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
 
     @Override
     public void showAddPeriodo() {
-        // TODO
+        mListener.onShowAddPeriodo();
     }
 
     @Override
     public void showPeriodoDetailsUi(String periodoId) {
-        // TODO
+        mListener.onShowPeriodoDetailsUi(periodoId);
     }
 
     @Override
@@ -192,6 +212,7 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
         return isAdded();
     }
 
+    @SuppressWarnings("all")
     private void showMessage(String message) {
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
     }
@@ -210,5 +231,13 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
             mPeriodosPresenter.openPeriodoDetails(periodo);
         }
     };
+
+    public interface OnPeriodosFragmentInteractionListener {
+
+        void onShowAddPeriodo();
+
+        void onShowPeriodoDetailsUi(String periodoId);
+
+    }
 
 }
