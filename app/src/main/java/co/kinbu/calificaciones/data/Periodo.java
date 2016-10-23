@@ -85,6 +85,10 @@ public class Periodo {
         return asignaturas;
     }
 
+    public boolean isEmpty() {
+        return nombre.isEmpty();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
