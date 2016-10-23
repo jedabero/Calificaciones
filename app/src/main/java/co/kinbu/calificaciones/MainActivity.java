@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final String TAG = "MainActivity";
 
-    private PeriodosPresenter mPeriodosPresenter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements
                 PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
         );
 
-        mPeriodosPresenter = new PeriodosPresenter(mPeriodosRepository, fragment);
+        new PeriodosPresenter(mPeriodosRepository, fragment);
 
         /*
         mPeriodosRepository.getPeriodos(new PeriodosDataSource.LoadPeriodosCallback() {
@@ -148,7 +146,15 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onShowPeriodos() {
-        // TODO
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment == null || !(fragment instanceof PeriodosFragment)) {
+            fragment = PeriodosFragment.newInstance();
+        }
+        ViewUtils.replaceFragmentOnActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
+        final PeriodosRepository mPeriodosRepository = PeriodosRepository.getInstance(
+                PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+        new PeriodosPresenter(mPeriodosRepository, (PeriodosFragment) fragment);
     }
 
     /*
