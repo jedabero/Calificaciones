@@ -21,7 +21,13 @@ public interface AsignaturasContract {
 
         void showMissingPeriodo();
 
+        void showNombre(String nombre);
+
+        void showPromedio(double nombre);
+
         void showEditPeriodo(String periodoId);
+
+        void showPeriodoDeleted();
 
         void showAsignaturas(List<Asignatura> asignaturas);
 
@@ -45,7 +51,7 @@ public interface AsignaturasContract {
 
         void deletePeriodo();
 
-        void loadAsignaturas(boolean forceUpdate, String periodoId);
+        void loadPeriodo(boolean forceUpdate);
 
         void addNewAsignatura(String periodoId);
 
