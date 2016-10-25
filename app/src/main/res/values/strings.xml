@@ -11,12 +11,20 @@
 
     <string name="opcion_agregar_asignatura">Agregar asignatura</string>
 
-    <string name="loading_periodos_error">Ocurrio un error al cargar los periodos</string>
-    <string name="no_periodos">Periodo guardado</string>
-    <string name="successfully_saved_periodo">Periodo guardado</string>
     <string name="refresh">Actualizar</string>
     <string name="add">Agregar</string>
+    <string name="edit">Editar</string>
     <string name="save">Guardar</string>
+    <string name="loading">Cargando</string>
+
+    <string name="loading_periodos_error">Ocurrio un error al cargar los periodos</string>
+    <string name="no_periodos">No hay periodos</string>
+    <string name="no_periodo">No hay periodo</string>
+    <string name="successfully_saved_periodo">Periodo guardado</string>
+
+    <string name="loading_asignaturas_error">Ocurrio un error al cargar los asignaturas</string>
+    <string name="no_asignaturas">No hay asignaturas</string>
+    <string name="successfully_saved_asignatura">Asignatura guardada</string>
 
     <string name="empty_periodo_message">Debe darle un nombre al periodo</string>
 

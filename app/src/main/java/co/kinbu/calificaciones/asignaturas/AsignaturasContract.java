@@ -23,9 +23,9 @@ public interface AsignaturasContract {
 
         void showNombre(String nombre);
 
-        void showPromedio(double nombre);
+        void showPromedio(double promedio);
 
-        void showEditPeriodo(String periodoId);
+        void showEditPeriodo();
 
         void showPeriodoDeleted();
 
@@ -53,7 +53,7 @@ public interface AsignaturasContract {
 
         void loadPeriodo(boolean forceUpdate);
 
-        void addNewAsignatura(String periodoId);
+        void addNewAsignatura();
 
         void openAsignaturaDetails(@NonNull Asignatura asignatura);
 
