@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.Periodo;
+import co.kinbu.calificaciones.util.ViewUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -86,7 +87,7 @@ public final class PeriodosAdapter extends RecyclerView.Adapter<PeriodosAdapter.
         void setPeriodo(Periodo periodo) {
             this.periodo = periodo;
             nombreText.setText(periodo.getNombre());
-            promedioText.setText(String.format(Locale.getDefault(), "%.2f", periodo.getPromedio()));
+            promedioText.setText(ViewUtils.formatPromedio(periodo.getPromedio()));
         }
     }
 }

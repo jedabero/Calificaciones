@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import java.util.Locale;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -48,4 +50,7 @@ public class ViewUtils {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
+    public static String formatPromedio(double promedio) {
+        return String.format(Locale.getDefault(), "%.2f", promedio);
+    }
 }

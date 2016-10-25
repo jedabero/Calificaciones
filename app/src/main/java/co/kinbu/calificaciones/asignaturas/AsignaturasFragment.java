@@ -162,7 +162,7 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
     @Override
     public void showPromedio(double promedio) {
         mPromedioView.setVisibility(View.VISIBLE);
-        mPromedioView.setText(String.format(Locale.getDefault(), "%.2f", promedio));
+        mPromedioView.setText(ViewUtils.formatPromedio(promedio));
     }
 
     @Override
