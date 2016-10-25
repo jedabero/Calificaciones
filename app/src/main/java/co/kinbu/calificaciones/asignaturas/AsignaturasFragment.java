@@ -3,7 +3,6 @@ package co.kinbu.calificaciones.asignaturas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,6 +22,7 @@ import java.util.Locale;
 
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.Asignatura;
+import co.kinbu.calificaciones.util.ViewUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -195,7 +195,7 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
 
     @Override
     public void showLoadingAsignaturasError() {
-        showMessage(getString(R.string.loading_asignaturas_error));
+        ViewUtils.showMessage(getView(), getString(R.string.loading_asignaturas_error));
     }
 
     @Override
@@ -205,16 +205,12 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
 
     @Override
     public void showSuccessfullySavedMessage() {
-        showMessage(getString(R.string.successfully_saved_asignatura));
+        ViewUtils.showMessage(getView(), getString(R.string.successfully_saved_asignatura));
     }
 
     @Override
     public boolean isActive() {
         return isAdded();
-    }
-
-    private void showMessage(String message) {
-        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
     }
 
     private void showNoAsignaturasView(String mainText, boolean showAddView) {

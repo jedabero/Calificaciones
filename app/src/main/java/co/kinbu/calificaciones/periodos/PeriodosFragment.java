@@ -4,13 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +23,7 @@ import java.util.List;
 
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.Periodo;
+import co.kinbu.calificaciones.util.ViewUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -200,7 +199,7 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
 
     @Override
     public void showLoadingPeriodosError() {
-        showMessage(getString(R.string.loading_periodos_error));
+        ViewUtils.showMessage(getView(), getString(R.string.loading_periodos_error));
     }
 
     @Override
@@ -210,17 +209,12 @@ public final class PeriodosFragment extends Fragment implements PeriodosContract
 
     @Override
     public void showSuccessfullySavedMessage() {
-        showMessage(getString(R.string.successfully_saved_periodo));
+        ViewUtils.showMessage(getView(), getString(R.string.successfully_saved_periodo));
     }
 
     @Override
     public boolean isActive() {
         return isAdded();
-    }
-
-    @SuppressWarnings("all")
-    private void showMessage(String message) {
-        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
     }
 
     private void showNoPeriodosView(String mainText, boolean showAddView) {

@@ -1,9 +1,12 @@
 package co.kinbu.calificaciones.util;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -38,6 +41,11 @@ public class ViewUtils {
             transaction.addToBackStack(fragmentClass);
             transaction.commit();
         }
+    }
+
+    @SuppressWarnings("all")
+    public static void showMessage(@Nullable View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
 }
