@@ -113,6 +113,26 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onShowEditPeriodo(String periodoId) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment == null || !(fragment instanceof AddEditPeriodoFragment)) {
+            fragment = AddEditPeriodoFragment.newInstance();
+        }
+        ViewUtils.replaceFragmentOnActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
+
+        final PeriodosRepository mPeriodosRepository = PeriodosRepository.getInstance(
+                PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        final AsignaturasRepository asignaturasRepository = AsignaturasRepository.getInstance(
+                AsignaturasLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        new AddEditPeriodoPresenter(periodoId, mPeriodosRepository,
+                asignaturasRepository, (AddEditPeriodoFragment) fragment);
+    }
+
+    @Override
     public void onShowAddAsignatura() {
         // TODO
     }

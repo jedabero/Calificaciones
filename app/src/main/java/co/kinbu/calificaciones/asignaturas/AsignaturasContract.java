@@ -25,7 +25,7 @@ public interface AsignaturasContract {
 
         void showPromedio(double promedio);
 
-        void showEditPeriodo();
+        void showEditPeriodo(String periodoId);
 
         void showPeriodoDeleted();
 

@@ -53,7 +53,7 @@ public final class AsignaturasPresenter implements AsignaturasContract.Presenter
             mAsignaturasView.showMissingPeriodo();
             return;
         }
-        mAsignaturasView.showEditPeriodo();
+        mAsignaturasView.showEditPeriodo(mPeriodoId);
     }
 
     @Override

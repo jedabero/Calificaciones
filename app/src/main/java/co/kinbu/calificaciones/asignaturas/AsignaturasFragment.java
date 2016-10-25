@@ -193,8 +193,8 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
     }
 
     @Override
-    public void showEditPeriodo() {
-        // TODO
+    public void showEditPeriodo(String periodoId) {
+        mListener.onShowEditPeriodo(periodoId);
     }
 
     @Override
@@ -256,6 +256,8 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
     };
 
     public interface OnAsignaturasFragmentInteractionListener {
+
+        void onShowEditPeriodo(String periodoId);
 
         void onShowAddAsignatura();
 
