@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,6 +38,8 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
     private static final String ARGUMENT_PERIODO_ID = "PERIODO_ID";
 
     private AsignaturasContract.Presenter mPresenter;
+
+    private AsigaturasAdapter mAsigaturasAdapter;
 
     private View mPeriodoDetails;
     private TextView mNombreView;
@@ -61,6 +64,13 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
         mPresenter.start();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mAsigaturasAdapter = new AsigaturasAdapter(new ArrayList<Asignatura>(0), mItemListener);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -73,6 +83,7 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
         mAsignaturasView = (RecyclerView) root.findViewById(R.id.list_asignaturas);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mAsignaturasView.setLayoutManager(layoutManager);
+        mAsignaturasView.setAdapter(mAsigaturasAdapter);
 
         mNoAsignaturasView = root.findViewById(R.id.no_asignaturas);
         mNoAsignaturasText = (TextView) root.findViewById(R.id.no_asignaturas_text);
@@ -177,7 +188,7 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
 
     @Override
     public void showAsignaturas(List<Asignatura> asignaturas) {
-
+        mAsigaturasAdapter.replaceData(asignaturas);
 
         mPeriodoDetails.setVisibility(View.VISIBLE);
         mNoAsignaturasView.setVisibility(View.GONE);
@@ -220,4 +231,12 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
         mNoAsignaturasText.setText(mainText);
         mAddAsignatura.setVisibility(showAddView ? View.VISIBLE : View.GONE);
     }
+
+    private AsignaturaItemListener mItemListener = new AsignaturaItemListener() {
+        @Override
+        public void onAsignaturaClick(Asignatura asignatura) {
+            mPresenter.openAsignaturaDetails(asignatura);
+        }
+    };
+
 }
