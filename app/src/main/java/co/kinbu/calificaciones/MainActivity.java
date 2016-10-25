@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import co.kinbu.calificaciones.asignaturas.AsignaturasFragment;
+import co.kinbu.calificaciones.asignaturas.AsignaturasPresenter;
 import co.kinbu.calificaciones.data.source.AsignaturasRepository;
 import co.kinbu.calificaciones.data.source.PeriodosRepository;
 import co.kinbu.calificaciones.data.source.local.AsignaturasLocalDataSource;
@@ -16,7 +18,8 @@ import co.kinbu.calificaciones.util.ViewUtils;
 
 public class MainActivity extends AppCompatActivity implements
         PeriodosFragment.OnPeriodosFragmentInteractionListener,
-        AddEditPeriodoFragment.OnAddEditPeriodoFragmentInteractionListener {
+        AddEditPeriodoFragment.OnAddEditPeriodoFragmentInteractionListener,
+        AsignaturasFragment.OnAsignaturasFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
@@ -78,7 +81,22 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onShowPeriodoDetailsUi(String periodoId) {
-        // TODO
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment == null || !(fragment instanceof AsignaturasFragment)) {
+            fragment = AsignaturasFragment.newInstance(periodoId);
+        }
+        ViewUtils.replaceFragmentOnActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
+
+        final PeriodosRepository mPeriodosRepository = PeriodosRepository.getInstance(
+                PeriodosLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        final AsignaturasRepository asignaturasRepository = AsignaturasRepository.getInstance(
+                AsignaturasLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        new AsignaturasPresenter(periodoId, mPeriodosRepository,
+                asignaturasRepository, (AsignaturasFragment) fragment);
     }
 
     @Override
@@ -94,4 +112,13 @@ public class MainActivity extends AppCompatActivity implements
         new PeriodosPresenter(mPeriodosRepository, (PeriodosFragment) fragment);
     }
 
+    @Override
+    public void onShowAddAsignatura() {
+        // TODO
+    }
+
+    @Override
+    public void onShowAsignaturaDetailsUi(String asignaturaId) {
+        // TODO
+    }
 }

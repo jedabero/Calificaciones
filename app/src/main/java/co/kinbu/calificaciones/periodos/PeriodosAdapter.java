@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Locale;
 
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.Periodo;

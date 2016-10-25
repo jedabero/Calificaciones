@@ -38,6 +38,8 @@ public final class AsignaturasPresenter implements AsignaturasContract.Presenter
         mAsignaturasRepository = checkNotNull(asignaturasRepository);
         mPeriodosRepository = checkNotNull(periodosRepository);
         mAsignaturasView = checkNotNull(asignaturasView);
+
+        mAsignaturasView.setPresenter(this);
     }
 
     @Override

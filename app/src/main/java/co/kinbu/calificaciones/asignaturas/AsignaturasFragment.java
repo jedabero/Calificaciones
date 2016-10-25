@@ -1,5 +1,6 @@
 package co.kinbu.calificaciones.asignaturas;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import co.kinbu.calificaciones.R;
 import co.kinbu.calificaciones.data.Asignatura;
@@ -36,6 +36,8 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
 
     @NonNull
     private static final String ARGUMENT_PERIODO_ID = "PERIODO_ID";
+
+    private OnAsignaturasFragmentInteractionListener mListener;
 
     private AsignaturasContract.Presenter mPresenter;
 
@@ -118,7 +120,21 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
         mPresenter = checkNotNull(presenter);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnAsignaturasFragmentInteractionListener) {
+            mListener = (OnAsignaturasFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnAsignaturasFragmentInteractionListener");
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -196,12 +212,12 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
 
     @Override
     public void showAddAsignatura() {
-        // TODO
+        mListener.onShowAddAsignatura();
     }
 
     @Override
     public void showAsignaturaDetailsUi(String asignaturaId) {
-        // TODO
+        mListener.onShowAsignaturaDetailsUi(asignaturaId);
     }
 
     @Override
@@ -238,5 +254,13 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
             mPresenter.openAsignaturaDetails(asignatura);
         }
     };
+
+    public interface OnAsignaturasFragmentInteractionListener {
+
+        void onShowAddAsignatura();
+
+        void onShowAsignaturaDetailsUi(String asignaturaId);
+
+    }
 
 }
