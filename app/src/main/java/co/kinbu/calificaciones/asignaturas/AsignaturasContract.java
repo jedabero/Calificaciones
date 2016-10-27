@@ -31,7 +31,7 @@ public interface AsignaturasContract {
 
         void showAsignaturas(List<Asignatura> asignaturas);
 
-        void showAddAsignatura();
+        void showAddAsignatura(String periodoId);
 
         void showAsignaturaDetailsUi(String asignaturaId);
 

@@ -93,7 +93,7 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
         mAddAsignatura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddAsignatura();
+                mPresenter.addNewAsignatura();
             }
         });
 
@@ -211,8 +211,8 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
     }
 
     @Override
-    public void showAddAsignatura() {
-        mListener.onShowAddAsignatura();
+    public void showAddAsignatura(String periodoId) {
+        mListener.onShowAddAsignatura(periodoId);
     }
 
     @Override
@@ -259,7 +259,7 @@ public final class AsignaturasFragment extends Fragment implements AsignaturasCo
 
         void onShowEditPeriodo(String periodoId);
 
-        void onShowAddAsignatura();
+        void onShowAddAsignatura(String periodoId);
 
         void onShowAsignaturaDetailsUi(String asignaturaId);
 

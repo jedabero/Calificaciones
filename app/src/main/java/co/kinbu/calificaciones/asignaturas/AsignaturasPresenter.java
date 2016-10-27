@@ -123,7 +123,7 @@ public final class AsignaturasPresenter implements AsignaturasContract.Presenter
 
     @Override
     public void addNewAsignatura() {
-        mAsignaturasView.showAddAsignatura();
+        mAsignaturasView.showAddAsignatura(mPeriodoId);
     }
 
     @Override

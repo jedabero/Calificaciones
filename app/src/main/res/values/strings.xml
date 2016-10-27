@@ -27,5 +27,6 @@
     <string name="successfully_saved_asignatura">Asignatura guardada</string>
 
     <string name="empty_periodo_message">Debe darle un nombre al periodo</string>
+    <string name="empty_asignatura_message">Debe darle un nombre a la asignatura</string>
 
 </resources>

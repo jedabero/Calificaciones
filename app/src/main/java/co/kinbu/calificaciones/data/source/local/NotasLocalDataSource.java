@@ -31,7 +31,7 @@ public class NotasLocalDataSource implements NotasDataSource {
         mDbHelper = new DbHelper(context);
     }
 
-    public static NotasLocalDataSource getInstance(@NonNull Context context) {
+    public static NotasLocalDataSource getINSTANCE(@NonNull Context context) {
         if (INSTANCE == null) {
             INSTANCE = new NotasLocalDataSource(context);
         }

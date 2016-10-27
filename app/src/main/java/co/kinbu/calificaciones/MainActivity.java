@@ -6,9 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import co.kinbu.calificaciones.asignaturas.AsignaturasFragment;
 import co.kinbu.calificaciones.asignaturas.AsignaturasPresenter;
+import co.kinbu.calificaciones.asignaturas.addedit.AddEditAsignaturaFragment;
+import co.kinbu.calificaciones.asignaturas.addedit.AddEditAsignaturaPresenter;
 import co.kinbu.calificaciones.data.source.AsignaturasRepository;
+import co.kinbu.calificaciones.data.source.NotasRepository;
 import co.kinbu.calificaciones.data.source.PeriodosRepository;
 import co.kinbu.calificaciones.data.source.local.AsignaturasLocalDataSource;
+import co.kinbu.calificaciones.data.source.local.NotasLocalDataSource;
 import co.kinbu.calificaciones.data.source.local.PeriodosLocalDataSource;
 import co.kinbu.calificaciones.periodos.PeriodosFragment;
 import co.kinbu.calificaciones.periodos.PeriodosPresenter;
@@ -19,7 +23,8 @@ import co.kinbu.calificaciones.util.ViewUtils;
 public class MainActivity extends AppCompatActivity implements
         PeriodosFragment.OnPeriodosFragmentInteractionListener,
         AddEditPeriodoFragment.OnAddEditPeriodoFragmentInteractionListener,
-        AsignaturasFragment.OnAsignaturasFragmentInteractionListener {
+        AsignaturasFragment.OnAsignaturasFragmentInteractionListener,
+        AddEditAsignaturaFragment.OnAddEditAsignaturaFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
@@ -133,12 +138,32 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onShowAddAsignatura() {
-        // TODO
+    public void onShowAddAsignatura(String periodoId) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment == null || !(fragment instanceof AddEditAsignaturaFragment)) {
+            fragment = AddEditAsignaturaFragment.newInstance();
+        }
+        ViewUtils.replaceFragmentOnActivity(getSupportFragmentManager(), fragment, R.id.fragment_container);
+
+        final AsignaturasRepository asignaturasRepository = AsignaturasRepository.getInstance(
+                AsignaturasLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        final NotasRepository notasRepository = NotasRepository.getInstance(
+                NotasLocalDataSource.getINSTANCE(getApplicationContext())
+        );
+
+        new AddEditAsignaturaPresenter(periodoId, null, asignaturasRepository, notasRepository,
+                (AddEditAsignaturaFragment) fragment);
     }
 
     @Override
     public void onShowAsignaturaDetailsUi(String asignaturaId) {
         // TODO
+    }
+
+    @Override
+    public void onShowAsignaturas(String periodoId) {
+        onShowPeriodoDetailsUi(periodoId);
     }
 }

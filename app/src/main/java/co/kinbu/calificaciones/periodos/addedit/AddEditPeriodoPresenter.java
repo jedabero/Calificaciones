@@ -106,7 +106,7 @@ public final class AddEditPeriodoPresenter implements AddEditPeriodoContract.Pre
 
     private void updatePeriodo(String nombre) {
         if (isNewPeriodo()) {
-            throw new RuntimeException("createPeriodo() should only be called when editing.");
+            throw new RuntimeException("updatePeriodo() should only be called when editing.");
         }
         mPeriodosDataSource.updatePeriodo(new Periodo(mPeriodoId, nombre, mPeriodoPromedio));
         mAddEditPeriodoView.showPeriodos();

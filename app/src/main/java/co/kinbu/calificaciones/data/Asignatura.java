@@ -1,5 +1,7 @@
 package co.kinbu.calificaciones.data;
 
+import android.support.annotation.NonNull;
+
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +20,7 @@ import co.kinbu.calificaciones.data.source.local.PersistenceContract.AsignaturaE
 public class Asignatura {
 
     private String id;
+    @NonNull
     @SerializedName(AsignaturaEntry.COLUMN_NAME_PERIODO_ID)
     private String periodoId;
 
@@ -31,7 +34,7 @@ public class Asignatura {
      *
      * @param periodoId the periodo id
      */
-    public Asignatura(String periodoId) {
+    public Asignatura(@NonNull String periodoId) {
         this(periodoId, "Asignatura");
     }
 
@@ -41,32 +44,32 @@ public class Asignatura {
      * @param periodoId the periodo id
      * @param nombre    the nombre
      */
-    public Asignatura(String periodoId, String nombre) {
-        this(UUID.randomUUID().toString(), periodoId, nombre);
+    public Asignatura(@NonNull String periodoId, String nombre) {
+        this(periodoId, UUID.randomUUID().toString(), nombre);
     }
 
     /**
      * Instantiates a new Asignatura.
      *
-     * @param id        the id
      * @param periodoId the periodo id
+     * @param id        the id
      * @param nombre    the nombre
      */
-    public Asignatura(String id, String periodoId, String nombre) {
+    public Asignatura(@NonNull String periodoId, String id, String nombre) {
         this(id, periodoId, nombre, 0d);
     }
 
     /**
      * Instantiates a new Asignatura.
      *
-     * @param id         the id
      * @param periodoId  the periodo id
+     * @param id         the id
      * @param nombre     the nombre
      * @param definitiva the definitiva
      */
-    public Asignatura(String id, String periodoId, String nombre, double definitiva) {
-        this.id = id;
+    public Asignatura(@NonNull String periodoId, String id, String nombre, double definitiva) {
         this.periodoId = periodoId;
+        this.id = id;
         this.nombre = nombre;
         this.definitiva = definitiva;
         this.notas = new ArrayList<>();
@@ -98,6 +101,10 @@ public class Asignatura {
 
     public List<Nota> getNotas() {
         return notas;
+    }
+
+    public boolean isEmpty() {
+        return nombre.isEmpty();
     }
 
     @Override
