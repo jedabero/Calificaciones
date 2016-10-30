@@ -3,6 +3,7 @@ package co.kinbu.calificaciones.data.source.local;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.AsignaturaEntry;
 import co.kinbu.calificaciones.data.source.local.PersistenceContract.NotaEntry;
@@ -38,9 +39,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     AsignaturaEntry.COLUMN_NAME_ID + TEXT + PRIMARY_KEY + COMMA +
                     AsignaturaEntry.COLUMN_NAME_PERIODO_ID + TEXT + COMMA +
                     AsignaturaEntry.COLUMN_NAME_NOMBRE + TEXT + COMMA +
-                    AsignaturaEntry.COLUMN_NAME_DEFINITIVA + REAL + COMMA +
-                    FOREIGN_KEY + "(" + AsignaturaEntry.COLUMN_NAME_PERIODO_ID + ") " + REFERENCES +
-                    PeriodoEntry.TABLE_NAME + " (" + PeriodoEntry.COLUMN_NAME_ID + ")" +
+                    AsignaturaEntry.COLUMN_NAME_DEFINITIVA + REAL + //COMMA +
+                    //FOREIGN_KEY + "(" + AsignaturaEntry.COLUMN_NAME_PERIODO_ID + ") " + REFERENCES +
+                    //PeriodoEntry.TABLE_NAME + " (" + PeriodoEntry.COLUMN_NAME_ID + ")" +
             ")";
 
     private static final String SQL_DROP_ASIGNATURAS = "DROP TABLE " + AsignaturaEntry.TABLE_NAME;
@@ -63,9 +64,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     NotaEntry.COLUMN_NAME_ID + TEXT + PRIMARY_KEY + COMMA +
                     NotaEntry.COLUMN_NAME_ASIGNATURA_ID + TEXT + COMMA +
                     NotaEntry.COLUMN_NAME_VALOR + REAL + COMMA +
-                    NotaEntry.COLUMN_NAME_PESO + INTEGER + COMMA +
-                    FOREIGN_KEY + "(" + NotaEntry.COLUMN_NAME_ASIGNATURA_ID + ") " + REFERENCES +
-                    AsignaturaEntry.TABLE_NAME + " (" + AsignaturaEntry.COLUMN_NAME_ID + ")" +
+                    NotaEntry.COLUMN_NAME_PESO + INTEGER + //COMMA +
+                    //FOREIGN_KEY + "(" + NotaEntry.COLUMN_NAME_ASIGNATURA_ID + ") " + REFERENCES +
+                    //AsignaturaEntry.TABLE_NAME + " (" + AsignaturaEntry.COLUMN_NAME_ID + ")" +
             ")";
 
     public DbHelper(Context context) {
@@ -74,20 +75,17 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Log.d("DBHELPER", SQL_CREATE_PERIODOS);
         db.execSQL(SQL_CREATE_PERIODOS);
+        // Log.d("DBHELPER", SQL_CREATE_ASIGNATURAS);
         db.execSQL(SQL_CREATE_ASIGNATURAS);
+        // Log.d("DBHELPER", SQL_CREATE_NOTAS);
         db.execSQL(SQL_CREATE_NOTAS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            db.execSQL(SQL_CREATE_PERIODOS);
-            db.execSQL(SQL_TEMP_ASIGNATURAS_1);
-            db.execSQL(SQL_DROP_ASIGNATURAS);
-            db.execSQL(SQL_CREATE_ASIGNATURAS);
-            db.execSQL(SQL_POPULATE_ASIGNATURAS_1);
-        }
+
     }
 
     @Override
